@@ -24,6 +24,7 @@ Step-by-step instructions to deploy the chatbot backend on a Linux server (Ubunt
 |---|---|---|
 | Python | 3.10+ | Runtime |
 | pip | 23+ | Package installer |
+| MySQL | 8.0+ | Primary database |
 | nginx | 1.18+ | Reverse proxy / TLS termination |
 | certbot | any | Free SSL certificate (Let's Encrypt) |
 | systemd | any | Process management |
@@ -39,6 +40,9 @@ sudo apt update && sudo apt upgrade -y
 
 # Install system dependencies
 sudo apt install -y python3 python3-pip python3-venv git nginx certbot python3-certbot-nginx curl
+
+# Install MySQL server
+sudo apt install -y mysql-server
 
 # Verify Python version (must be 3.10+)
 python3 --version
@@ -80,11 +84,48 @@ pip install --upgrade pip
 pip install -e .
 ```
 
-This installs everything listed in `pyproject.toml`: FastAPI, Uvicorn, ChromaDB, sentence-transformers, all AI provider SDKs, SQLAlchemy, Alembic, and auth libraries.
+This installs everything listed in `pyproject.toml`: FastAPI, Uvicorn, ChromaDB, sentence-transformers, all AI provider SDKs, SQLAlchemy, Alembic, `aiomysql`, and auth libraries.
 
 ---
 
-## 5. Storage Directories
+## 5. MySQL Database Setup
+
+### Secure MySQL installation
+
+```bash
+sudo mysql_secure_installation
+# Follow prompts: set root password, remove test DB, disallow remote root login
+```
+
+### Create database and user
+
+```bash
+sudo mysql -u root -p
+```
+
+Run these SQL commands inside the MySQL prompt:
+
+```sql
+CREATE DATABASE chatbot CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'chatbot'@'localhost' IDENTIFIED BY 'yourpassword';
+GRANT ALL PRIVILEGES ON chatbot.* TO 'chatbot'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;
+```
+
+> Use a strong unique password for `chatbot` user. Replace `yourpassword` everywhere.
+
+### Verify connection
+
+```bash
+mysql -u chatbot -p chatbot
+# Should open a MySQL prompt without error
+EXIT;
+```
+
+---
+
+## 6. Storage Directories
 
 ```bash
 mkdir -p storage/files storage/chroma_db logs
@@ -136,12 +177,16 @@ CSRF_SECRET_KEY=<another 64-char hex>
 ADMIN_TOTP_ENCRYPTION_KEY=<Fernet key>
 ```
 
-**Database / storage paths** — use absolute paths in production:
+**Database** — use the MySQL user and database created in step 5:
+```env
+HISTORY_DB_URL=mysql+aiomysql://chatbot:yourpassword@localhost:3306/chatbot
+```
+
+**Storage paths** — use absolute paths in production:
 ```env
 STORAGE_ROOT=/home/chatbot/app/storage/files
 CHROMA_PATH=/home/chatbot/app/storage/chroma_db
 META_DB_PATH=/home/chatbot/app/storage/meta.json
-HISTORY_DB_URL=sqlite+aiosqlite:////home/chatbot/app/storage/app.db
 ```
 
 **API settings**:
@@ -407,8 +452,10 @@ sudo nano /etc/logrotate.d/chatbot
 | `502 Bad Gateway` | `sudo systemctl status chatbot` — is uvicorn running? |
 | `500` on chat | `tail -f logs/error.log` — usually a missing API key or bad `.env` |
 | Streaming (SSE) cuts off | Confirm `proxy_buffering off` in nginx config |
-| Widget JS returns 404 | Check the `location /widget/` alias path in nginx |
-| DB locked error | Only one uvicorn process should write; reduce `--workers 1` if using SQLite |
+| Widget JS returns 404 | Restart uvicorn — FastAPI mounts `/widget/` on startup |
+| `Can't connect to MySQL` | Check `HISTORY_DB_URL` in `.env`; verify MySQL is running: `sudo systemctl status mysql` |
+| `Access denied for user` | Re-run the `GRANT` SQL in step 5 with correct username/password |
+| `Table doesn't exist` | Run `alembic upgrade head` — migrations not applied yet |
 | Admin login fails | Re-run `python3 scripts/create_admin.py` to reset password |
 | ChromaDB OOM on startup | Reduce `EMBED_BATCH_SIZE` in `.env` or increase server RAM |
 
@@ -417,12 +464,14 @@ sudo nano /etc/logrotate.d/chatbot
 ## Production Checklist
 
 - [ ] `.env` file has no placeholder values (`xxx`, `replace-with-...`)
+- [ ] `HISTORY_DB_URL` points to MySQL with real credentials (not the example password)
+- [ ] MySQL `chatbot` database and user created; `GRANT` applied
+- [ ] `alembic upgrade head` run — all tables created
 - [ ] `AUTH_SECRET_KEY`, `CSRF_SECRET_KEY`, `ADMIN_TOTP_ENCRYPTION_KEY` are unique random values
 - [ ] `API_HOST=127.0.0.1` (not `0.0.0.0`)
 - [ ] SSL certificate installed and auto-renewal working
-- [ ] Firewall enabled — only ports 22, 80, 443 open
+- [ ] Firewall enabled — only ports 22, 80, 443 open; port 3306 not exposed externally
 - [ ] Port 8000 not reachable from the internet
 - [ ] `MASTER_ADMIN_PASSWORD_HASH` set (not plaintext)
 - [ ] `storage/` directory has correct permissions (`chown -R chatbot:chatbot storage/`)
 - [ ] Log rotation configured
-- [ ] `alembic upgrade head` run after deploy

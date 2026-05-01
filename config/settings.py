@@ -31,7 +31,7 @@ class Settings(BaseSettings):
     STORAGE_ROOT: Path = Path("./storage/files")
     CHROMA_PATH: Path = Path("./storage/chroma_db")
     META_DB_PATH: Path = Path("./storage/meta.json")
-    HISTORY_DB_URL: str = "sqlite+aiosqlite:///./storage/app.db"
+    HISTORY_DB_URL: str = "mysql+aiomysql://user:password@localhost:3306/chatbot"
 
     # Embedding
     EMBED_MODEL: str = "all-MiniLM-L6-v2"

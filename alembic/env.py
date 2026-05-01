@@ -13,6 +13,10 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
+# Override sqlalchemy.url from .env so alembic.ini never contains real credentials.
+from config.settings import settings  # noqa: E402
+config.set_main_option("sqlalchemy.url", settings.HISTORY_DB_URL)
+
 target_metadata = Base.metadata
 
 
