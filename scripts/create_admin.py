@@ -8,9 +8,14 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from passlib.context import CryptContext
+import base64
+import hashlib
 
-_pwd_ctx = CryptContext(schemes=["bcrypt"], deprecated="auto")
+import bcrypt
+
+
+def _prepare(plain: str) -> bytes:
+    return base64.b64encode(hashlib.sha256(plain.encode()).digest())
 ENV_PATH = Path(".env")
 
 
@@ -44,7 +49,7 @@ def main() -> None:
         print("Error: passwords do not match.")
         sys.exit(1)
 
-    hashed = _pwd_ctx.hash(password)
+    hashed = bcrypt.hashpw(_prepare(password), bcrypt.gensalt(rounds=12)).decode()
     print(f"\nBcrypt hash generated.")
 
     env = _read_env()

@@ -23,13 +23,20 @@ _REFRESH_TYPE = "refresh"
 
 # ── Password ──────────────────────────────────────────────────────────────────
 
+import hashlib
+
+def _prepare(plain: str) -> bytes:
+    # SHA-256 + base64 keeps input within bcrypt's 72-byte limit for any password length.
+    return base64.b64encode(hashlib.sha256(plain.encode()).digest())
+
+
 def hash_password(plain: str) -> str:
-    return bcrypt.hashpw(plain.encode(), bcrypt.gensalt(rounds=12)).decode()
+    return bcrypt.hashpw(_prepare(plain), bcrypt.gensalt(rounds=12)).decode()
 
 
 def verify_password(plain: str, hashed: str) -> bool:
     try:
-        return bcrypt.checkpw(plain.encode(), hashed.encode())
+        return bcrypt.checkpw(_prepare(plain), hashed.encode())
     except Exception:
         return False
 

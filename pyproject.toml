@@ -39,7 +39,7 @@ dependencies = [
 
   # Auth + security
   "python-jose[cryptography]",
-  "passlib[bcrypt]",
+  "bcrypt>=4.0",
   "pyotp",
   "cryptography",
   "slowapi",
