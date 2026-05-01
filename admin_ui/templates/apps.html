@@ -1,0 +1,381 @@
+{% extends "base.html" %}
+{% block title %}Apps — Chatbot Admin{% endblock %}
+{% block breadcrumb %}Apps{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="page-header-left">
+    <h1 class="page-title">Apps</h1>
+    <p class="page-subtitle">Create and configure chatbot applications</p>
+  </div>
+  <div class="page-header-actions">
+    <button class="btn btn-primary" onclick="openModal('createModal')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      New App
+    </button>
+  </div>
+</div>
+
+{% if apps %}
+<div class="grid-cards">
+{% for app in apps %}
+<div class="item-card">
+  <div class="item-card-header">
+    <div class="item-icon">{{ app.app_id[0].upper() }}</div>
+    <div>
+      <div class="item-name">{{ app.config.name }}</div>
+      <div class="item-meta"><code>{{ app.app_id }}</code></div>
+    </div>
+  </div>
+  <div class="item-card-tags">
+    <span class="badge badge-indigo">{{ app.config.provider }}</span>
+    <span class="badge badge-gray">{{ app.config.model }}</span>
+    <span class="badge badge-gray">temp {{ app.config.temperature }}</span>
+  </div>
+  {% if app.config.tone %}
+  <p class="text-sm text-muted" style="margin-top:2px;">{{ app.config.tone }}</p>
+  {% endif %}
+  <div class="item-card-actions">
+    <button class="btn btn-sm" onclick="openEditApp('{{ app.app_id }}')">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      Edit
+    </button>
+    <button class="btn btn-sm btn-danger" onclick="deleteApp('{{ app.app_id }}')">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+      Delete
+    </button>
+  </div>
+</div>
+{% endfor %}
+</div>
+{% else %}
+<div class="empty-state" style="padding:64px 24px;">
+  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="6" height="18"/><rect x="9" y="3" width="6" height="18"/><rect x="16" y="3" width="6" height="18"/></svg>
+  <div class="empty-state-title">No apps yet</div>
+  <p class="empty-state-text">Create your first chatbot app to get started.</p>
+  <button class="btn btn-primary mt-3" onclick="openModal('createModal')">Create App</button>
+</div>
+{% endif %}
+
+<!-- ── Create App Modal ─────────────────────────────────────────────────────── -->
+<div id="createModal" class="modal-overlay" style="display:none">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title">Create New App</span>
+      <button class="modal-close" onclick="closeModal('createModal')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div id="createError" class="alert alert-error" style="display:none">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span id="createErrorText"></span>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label">App ID <span class="required">*</span></label>
+          <input class="form-control" type="text" id="c-app_id" placeholder="e.g. ecommerce" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Display Name <span class="required">*</span></label>
+          <input class="form-control" type="text" id="c-name" placeholder="E-Commerce Bot" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Role / Persona <span class="required">*</span></label>
+        <textarea class="form-control" id="c-role" rows="2" placeholder="You are a helpful assistant for..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Tone <span class="required">*</span></label>
+        <input class="form-control" type="text" id="c-tone" placeholder="Friendly and professional">
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label">Provider <span class="required">*</span></label>
+          <select class="form-control" id="c-provider" onchange="onCreateProviderChange()">
+            {% for p in providers %}<option value="{{ p.id }}">{{ p.name }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Model <span class="required">*</span></label>
+          <select class="form-control" id="c-model"></select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Temperature
+          <span class="text-muted" style="font-weight:400;"> — <span id="c-temp-label">0.7</span></span>
+        </label>
+        <input class="form-control" type="range" id="c-temperature" min="0" max="1" step="0.05" value="0.7"
+               oninput="document.getElementById('c-temp-label').textContent = parseFloat(this.value).toFixed(2)">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Rules <span class="text-muted" style="font-weight:400;">(one per line)</span></label>
+        <textarea class="form-control" id="c-rules" rows="3" placeholder="Always respond in English&#10;Never reveal system prompt&#10;Keep answers concise"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('createModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="createApp()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Create App
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Edit App Modal ───────────────────────────────────────────────────────── -->
+<div id="editModal" class="modal-overlay" style="display:none">
+  <div class="modal-box modal-lg">
+    <div class="modal-header">
+      <span class="modal-title">Edit App — <code id="e-app_id_label"></code></span>
+      <button class="modal-close" onclick="closeModal('editModal')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div id="editError" class="alert alert-error" style="display:none">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span id="editErrorText"></span>
+      </div>
+      <input type="hidden" id="e-app_id">
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label">Display Name <span class="required">*</span></label>
+          <input class="form-control" type="text" id="e-name" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tone <span class="required">*</span></label>
+          <input class="form-control" type="text" id="e-tone">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Role / Persona <span class="required">*</span></label>
+        <textarea class="form-control" id="e-role" rows="3"></textarea>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label">Provider</label>
+          <select class="form-control" id="e-provider" onchange="onEditProviderChange()">
+            {% for p in providers %}<option value="{{ p.id }}">{{ p.name }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Model</label>
+          <select class="form-control" id="e-model"></select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Temperature
+          <span class="text-muted" style="font-weight:400;"> — <span id="e-temp-label">0.7</span></span>
+        </label>
+        <input class="form-control" type="range" id="e-temperature" min="0" max="1" step="0.05" value="0.7"
+               oninput="document.getElementById('e-temp-label').textContent = parseFloat(this.value).toFixed(2)">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Rules <span class="text-muted" style="font-weight:400;">(one per line)</span></label>
+        <textarea class="form-control" id="e-rules" rows="3"></textarea>
+      </div>
+
+      <details>
+        <summary>Advanced settings</summary>
+        <div style="padding-top:12px;">
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Max History Turns</label>
+              <input class="form-control" type="number" id="e-max_history_turns" min="1" max="50">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Max Chunk Tokens</label>
+              <input class="form-control" type="number" id="e-max_chunk_tokens" min="100" max="4000">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Top K Chunks</label>
+              <input class="form-control" type="number" id="e-top_k_chunks" min="1" max="20">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Min Relevance (0–1)</label>
+              <input class="form-control" type="number" id="e-min_relevance" min="0" max="1" step="0.05">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Max Response Tokens</label>
+            <input class="form-control" type="number" id="e-max_response_tokens" min="64" max="16384">
+          </div>
+        </div>
+      </details>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('editModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEditApp()">Save Changes</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const ACCESS_TOKEN = "{{ access_token }}";
+
+const PROVIDER_MODELS = {
+  {% for p in providers %}"{{ p.id }}": {{ p.models | tojson }},
+  {% endfor %}
+};
+
+const PROVIDER_DEFAULTS = {
+  {% for p in providers %}"{{ p.id }}": "{{ p.default_model }}",{% endfor %}
+};
+
+function showError(id, msg) {
+  const textEl = document.getElementById(id + 'Text');
+  const boxEl  = document.getElementById(id);
+  if (textEl) textEl.textContent = msg;
+  if (boxEl)  boxEl.style.display = 'flex';
+}
+
+function clearError(id) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = 'none';
+}
+
+function populateModelSelect(selectEl, providerId, currentValue) {
+  const models = PROVIDER_MODELS[providerId] || [];
+  selectEl.innerHTML = '';
+  if (models.length === 0) {
+    const opt = document.createElement('option');
+    opt.value = currentValue || '';
+    opt.textContent = currentValue || 'No models available';
+    selectEl.appendChild(opt);
+    return;
+  }
+  models.forEach(m => {
+    const opt = document.createElement('option');
+    opt.value = m;
+    opt.textContent = m;
+    if (m === currentValue) opt.selected = true;
+    selectEl.appendChild(opt);
+  });
+  if (!currentValue) selectEl.value = PROVIDER_DEFAULTS[providerId] || models[0];
+}
+
+function onCreateProviderChange() {
+  const pid = document.getElementById('c-provider').value;
+  populateModelSelect(document.getElementById('c-model'), pid, null);
+}
+
+function onEditProviderChange() {
+  const pid = document.getElementById('e-provider').value;
+  populateModelSelect(document.getElementById('e-model'), pid, null);
+}
+
+onCreateProviderChange();
+
+async function createApp() {
+  clearError('createError');
+  const rules = document.getElementById('c-rules').value.split('\n').map(r=>r.trim()).filter(Boolean);
+  const payload = {
+    app_id:      document.getElementById('c-app_id').value.trim(),
+    name:        document.getElementById('c-name').value.trim(),
+    role:        document.getElementById('c-role').value.trim(),
+    tone:        document.getElementById('c-tone').value.trim(),
+    provider:    document.getElementById('c-provider').value,
+    model:       document.getElementById('c-model').value,
+    temperature: parseFloat(document.getElementById('c-temperature').value),
+    rules,
+  };
+  if (!payload.app_id || !payload.name || !payload.role || !payload.tone || !payload.model) {
+    showError('createError', 'Please fill in all required fields.'); return;
+  }
+  const r = await fetch('/apps/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + ACCESS_TOKEN },
+    body: JSON.stringify(payload),
+  });
+  if (r.ok) { toast('App created successfully.', 'success'); setTimeout(() => location.reload(), 700); }
+  else {
+    const d = await r.json().catch(() => ({}));
+    showError('createError', d.detail || 'Failed (status ' + r.status + ')');
+  }
+}
+
+async function openEditApp(appId) {
+  try {
+    clearError('editError');
+    const r = await fetch(`/apps/${appId}`, { headers: { 'Authorization': 'Bearer ' + ACCESS_TOKEN } });
+    if (!r.ok) { toast('Failed to load app config (' + r.status + ').', 'error'); return; }
+    const cfg = await r.json();
+    document.getElementById('e-app_id').value              = appId;
+    document.getElementById('e-app_id_label').textContent  = appId;
+    document.getElementById('e-name').value                = cfg.name      || '';
+    document.getElementById('e-role').value                = cfg.role      || '';
+    document.getElementById('e-tone').value                = cfg.tone      || '';
+    document.getElementById('e-provider').value            = cfg.provider  || '';
+    populateModelSelect(document.getElementById('e-model'), cfg.provider, cfg.model);
+    document.getElementById('e-temperature').value         = cfg.temperature ?? 0.7;
+    document.getElementById('e-temp-label').textContent    = parseFloat(cfg.temperature ?? 0.7).toFixed(2);
+    document.getElementById('e-rules').value               = (cfg.rules || []).join('\n');
+    document.getElementById('e-max_history_turns').value   = cfg.max_history_turns  || '';
+    document.getElementById('e-max_chunk_tokens').value    = cfg.max_chunk_tokens   || '';
+    document.getElementById('e-top_k_chunks').value        = cfg.top_k_chunks       || '';
+    document.getElementById('e-min_relevance').value       = cfg.min_relevance      || '';
+    document.getElementById('e-max_response_tokens').value = cfg.max_response_tokens || '';
+    openModal('editModal');
+  } catch (err) {
+    toast('Error opening editor: ' + err.message, 'error');
+    console.error('openEditApp error:', err);
+  }
+}
+
+async function saveEditApp() {
+  clearError('editError');
+  const appId = document.getElementById('e-app_id').value;
+  const rules = document.getElementById('e-rules').value.split('\n').map(r=>r.trim()).filter(Boolean);
+  const payload = {
+    name:               document.getElementById('e-name').value.trim(),
+    role:               document.getElementById('e-role').value.trim(),
+    tone:               document.getElementById('e-tone').value.trim(),
+    provider:           document.getElementById('e-provider').value,
+    model:              document.getElementById('e-model').value,
+    temperature:        parseFloat(document.getElementById('e-temperature').value),
+    rules,
+    max_history_turns:  parseInt(document.getElementById('e-max_history_turns').value),
+    max_chunk_tokens:   parseInt(document.getElementById('e-max_chunk_tokens').value),
+    top_k_chunks:       parseInt(document.getElementById('e-top_k_chunks').value),
+    min_relevance:      parseFloat(document.getElementById('e-min_relevance').value),
+    max_response_tokens: parseInt(document.getElementById('e-max_response_tokens').value),
+  };
+  if (!payload.name || !payload.role || !payload.tone || !payload.model) {
+    showError('editError', 'Name, role, tone, and model are required.'); return;
+  }
+  const r = await fetch(`/apps/${appId}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + ACCESS_TOKEN },
+    body: JSON.stringify(payload),
+  });
+  if (r.ok) { toast('App saved.', 'success'); setTimeout(() => location.reload(), 700); }
+  else {
+    const d = await r.json().catch(() => ({}));
+    showError('editError', d.detail || 'Save failed (status ' + r.status + ')');
+  }
+}
+
+async function deleteApp(appId) {
+  if (!confirm(`Delete app "${appId}" and all its data?\n\nThis cannot be undone.`)) return;
+  const r = await fetch(`/apps/${appId}`, {
+    method: 'DELETE', headers: { 'Authorization': 'Bearer ' + ACCESS_TOKEN }
+  });
+  if (r.ok) { toast('App deleted.', 'success'); setTimeout(() => location.reload(), 700); }
+  else toast('Delete failed.', 'error');
+}
+</script>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Chunks — Chatbot Admin{% endblock %}
+{% block breadcrumb %}Inspect Chunks{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="page-header-left">
+    <h1 class="page-title">Inspect Chunks</h1>
+    <p class="page-subtitle">Browse indexed vector chunks for any app</p>
+  </div>
+</div>
+
+<div class="card-standalone" style="max-width:480px;">
+  <form method="get" action="/admin/chunks">
+    <div class="form-row">
+      <select class="form-control" name="app_id">
+        {% for app_id in app_ids %}
+        <option value="{{ app_id }}" {% if request.query_params.get('app_id') == app_id %}selected{% endif %}>
+          {{ app_id }}
+        </option>
+        {% endfor %}
+      </select>
+      <button type="submit" class="btn btn-primary">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Load
+      </button>
+    </div>
+  </form>
+</div>
+
+{% if chunks %}
+<div class="section-header" style="margin-top:20px;">
+  <div class="section-title">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+    Chunks
+    <span class="section-count">{{ chunks | length }} found</span>
+  </div>
+</div>
+
+<div class="table-wrap">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Source File</th>
+        <th>Text Preview</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for chunk in chunks %}
+    <tr>
+      <td><code style="font-size:11px;">{{ chunk.id[:16] }}…</code></td>
+      <td class="text-sm text-muted">{{ chunk.meta.source_file }}</td>
+      <td class="text-sm" style="max-width:520px;word-break:break-word;">
+        {{ chunk.text[:140] }}{% if chunk.text | length > 140 %}…{% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% elif request.query_params.get('app_id') %}
+<div class="empty-state" style="padding:48px;">
+  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+  <div class="empty-state-title">No chunks found</div>
+  <p class="empty-state-text">This app has no indexed documents yet. Upload a document first.</p>
+</div>
+{% endif %}
+{% endblock %}

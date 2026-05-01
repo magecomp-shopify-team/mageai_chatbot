@@ -1,0 +1,12 @@
+max_chunk_tokens: 800
+max_history_turns: 6
+max_response_tokens: 512
+min_relevance: 0.3
+model: gemini-2.5-pro
+name: RFQ Appp
+provider: gemini
+role: Assistant
+rules: []
+temperature: 0.45
+tone: Helpfull
+top_k_chunks: 4

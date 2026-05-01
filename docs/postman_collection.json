@@ -1,0 +1,384 @@
+{
+  "info": {
+    "name": "Multi-App RAG Chatbot API",
+    "description": "Complete API collection for the Multi-App RAG-powered chatbot backend.\n\n**Base URL**: `http://localhost:8000`\n\n**Auth**: Admin endpoints require a Bearer JWT token.\nGet the token via `POST /admin/login` (web) or set `Authorization: Bearer <token>` header.\n\n**Environment Variables**:\n- `base_url` = `http://localhost:8000`\n- `token` = JWT access token from login",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "2.0.0"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8000", "type": "string" },
+    { "key": "token", "value": "", "type": "string" },
+    { "key": "app_id", "value": "ecommerce", "type": "string" },
+    { "key": "session_id", "value": "session-001", "type": "string" }
+  ],
+  "item": [
+
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/health",
+            "description": "Returns API status and version. No auth required."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"status\": \"ok\",\n  \"version\": \"2.0.0\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "name": "Chat",
+      "item": [
+        {
+          "name": "Send Message",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/chat/",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"app_id\": \"{{app_id}}\",\n  \"session_id\": \"{{session_id}}\",\n  \"message\": \"What products do you have?\",\n  \"stream\": false,\n  \"provider_override\": null\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Send a chat message to an app. No auth required.\n\n- `app_id` — target app (must exist)\n- `session_id` — tracks conversation history\n- `stream` — set `true` for SSE streaming\n- `provider_override` — force a specific provider (admin use)"
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"reply\": \"We have a wide range of electronics and accessories...\",\n  \"session_id\": \"session-001\",\n  \"provider_used\": \"anthropic\",\n  \"model_used\": \"claude-haiku-4-5-20251001\",\n  \"token_usage\": {\n    \"input\": 320,\n    \"output\": 85\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Send Message (Streaming)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "text/event-stream" }
+            ],
+            "url": "{{base_url}}/chat/",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"app_id\": \"{{app_id}}\",\n  \"session_id\": \"{{session_id}}\",\n  \"message\": \"Tell me about your return policy\",\n  \"stream\": true\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Stream the reply as Server-Sent Events.\n\nEach event: `data: {\"chunk\": \"text piece\"}`\nFinal event: `data: {\"done\": true}`"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Apps",
+      "item": [
+        {
+          "name": "List Apps",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/apps/",
+            "description": "List all registered apps. No auth required."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  {\n    \"app_id\": \"ecommerce\",\n    \"name\": \"E-Commerce Assistant\",\n    \"provider\": \"anthropic\",\n    \"model\": \"claude-haiku-4-5-20251001\",\n    \"doc_count\": 12\n  },\n  {\n    \"app_id\": \"hr\",\n    \"name\": \"HR Support Bot\",\n    \"provider\": \"openai\",\n    \"model\": \"gpt-4o-mini\",\n    \"doc_count\": 7\n  }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Create App",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{base_url}}/apps/",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"app_id\": \"support\",\n  \"name\": \"Customer Support Bot\",\n  \"role\": \"You are a helpful customer support agent for Acme Corp.\",\n  \"tone\": \"friendly and professional\",\n  \"rules\": [\n    \"Always greet the customer politely\",\n    \"Escalate complex issues to a human agent\",\n    \"Never reveal internal pricing strategies\"\n  ],\n  \"provider\": \"anthropic\",\n  \"model\": \"claude-haiku-4-5-20251001\",\n  \"max_history_turns\": 6,\n  \"max_chunk_tokens\": 800,\n  \"top_k_chunks\": 4,\n  \"min_relevance\": 0.3,\n  \"max_response_tokens\": 512,\n  \"temperature\": 0.7\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Create a new app. **Admin auth required.**\n\nCreates `config/apps/{app_id}.yaml` on disk.\nReturns 409 if app_id already exists."
+          }
+        },
+        {
+          "name": "Reload App Config",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/apps/{{app_id}}/reload",
+            "description": "Hot-reload an app's YAML config from disk without restart. **Admin auth required.**"
+          }
+        },
+        {
+          "name": "Delete App",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/apps/{{app_id}}",
+            "description": "Delete an app and all its associated documents + embeddings. **Admin auth required.**"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Documents",
+      "item": [
+        {
+          "name": "List Documents",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/docs/{{app_id}}",
+            "description": "List all documents indexed for an app. No auth required."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"app_id\": \"ecommerce\",\n  \"documents\": [\n    {\n      \"filename\": \"product_catalog.md\",\n      \"file_hash\": \"abc123...\",\n      \"chunks_indexed\": 42,\n      \"uploaded_at\": \"2026-04-20T10:00:00Z\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Upload Document",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/docs/upload",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "app_id", "value": "{{app_id}}", "type": "text" },
+                { "key": "file", "type": "file", "description": "Only .md or .txt files allowed" }
+              ]
+            },
+            "description": "Upload and index a document for an app. **Admin auth required.**\n\nOnly `.md` and `.txt` files are accepted.\nIf the same file hash was already indexed, it will be skipped (`skipped: true`)."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"app_id\": \"ecommerce\",\n  \"filename\": \"product_catalog.md\",\n  \"chunks_indexed\": 42,\n  \"file_hash\": \"sha256:abc123...\",\n  \"skipped\": false\n}"
+            }
+          ]
+        },
+        {
+          "name": "Delete Document",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/docs/{{app_id}}/product_catalog.md",
+            "description": "Delete a single document and its embeddings. **Admin auth required.**"
+          }
+        },
+        {
+          "name": "Delete All Documents (App)",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/docs/{{app_id}}",
+            "description": "Delete ALL documents for an app. Clears vector DB embeddings. **Admin auth required.**"
+          }
+        },
+        {
+          "name": "Re-embed All Documents",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/docs/{{app_id}}/reembed",
+            "description": "Wipe and rebuild all embeddings for an app. Use after changing embedding model. **Admin auth required.**"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Chunks",
+      "item": [
+        {
+          "name": "List Chunks",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/chunks/{{app_id}}?limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["chunks", "{{app_id}}"],
+              "query": [{ "key": "limit", "value": "20" }]
+            },
+            "description": "Get raw chunks from vector DB for an app. No auth required.\n\n`limit` defaults to 20."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"app_id\": \"ecommerce\",\n  \"chunks\": [\n    {\n      \"id\": \"chunk-uuid-001\",\n      \"text\": \"Product: Blue Widget\\nPrice: $19.99\\nIn stock: Yes\",\n      \"meta\": {\n        \"filename\": \"product_catalog.md\",\n        \"chunk_index\": 0\n      }\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Delete Chunks",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/chunks/?chunk_ids=chunk-uuid-001&chunk_ids=chunk-uuid-002&app_id={{app_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["chunks", ""],
+              "query": [
+                { "key": "chunk_ids", "value": "chunk-uuid-001" },
+                { "key": "chunk_ids", "value": "chunk-uuid-002" },
+                { "key": "app_id", "value": "{{app_id}}" }
+              ]
+            },
+            "description": "Delete specific chunks by ID from vector DB. **Admin auth required.**"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Providers",
+      "item": [
+        {
+          "name": "List Providers",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/providers/",
+            "description": "List all registered AI providers. No auth required."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  {\n    \"provider_id\": \"anthropic\",\n    \"display_name\": \"Anthropic Claude\",\n    \"available\": true,\n    \"default_model\": \"claude-haiku-4-5-20251001\",\n    \"models\": [\n      \"claude-opus-4-5\",\n      \"claude-sonnet-4-5\",\n      \"claude-haiku-4-5-20251001\"\n    ]\n  },\n  {\n    \"provider_id\": \"openai\",\n    \"display_name\": \"OpenAI\",\n    \"available\": true,\n    \"default_model\": \"gpt-4o-mini\",\n    \"models\": [\"gpt-4o\", \"gpt-4o-mini\", \"o1\", \"o3-mini\"]\n  }\n]"
+            }
+          ]
+        },
+        {
+          "name": "List Models for Provider",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/providers/anthropic/models",
+            "description": "List available models for a specific provider. No auth required."
+          }
+        },
+        {
+          "name": "Provider Health Check",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/providers/anthropic/health",
+            "description": "Live health check — pings the provider API. **Admin auth required.**"
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"provider\": \"anthropic\",\n  \"healthy\": true,\n  \"latency_ms\": 342.5\n}"
+            }
+          ]
+        },
+        {
+          "name": "Test Provider",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{base_url}}/providers/anthropic/test",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Hello! Please reply with a single sentence.\",\n  \"model\": null\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Send a test message to a provider and get back a real response with latency. **Admin auth required.**\n\nLeave `model` as `null` to use the provider's default model."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"provider\": \"anthropic\",\n  \"model\": \"claude-haiku-4-5-20251001\",\n  \"reply\": \"Hello! I'm Claude, here to help you today.\",\n  \"input_tokens\": 12,\n  \"output_tokens\": 14,\n  \"latency_ms\": 512.3\n}"
+            }
+          ]
+        },
+        {
+          "name": "Enable / Disable Provider",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{base_url}}/providers/openai/enable",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"enabled\": false\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Enable or disable a provider. Updates `config/providers/{id}.yaml`. **Admin auth required.**"
+          }
+        },
+        {
+          "name": "Set Default Provider",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/providers/anthropic/default",
+            "description": "Set this provider as the system-wide default. Updates `DEFAULT_PROVIDER` in `.env`. **Admin auth required.**"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Audit Log",
+      "item": [
+        {
+          "name": "Get Audit Logs",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/audit/?limit=100",
+              "host": ["{{base_url}}"],
+              "path": ["audit", ""],
+              "query": [{ "key": "limit", "value": "100" }]
+            },
+            "description": "Fetch audit log entries (most recent first). **Admin auth required.**"
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  {\n    \"id\": 42,\n    \"timestamp\": \"2026-04-20T12:30:00\",\n    \"username\": \"master_admin\",\n    \"action\": \"doc.upload\",\n    \"target\": \"ecommerce/product_catalog.md\",\n    \"ip_address\": \"127.0.0.1\",\n    \"success\": true,\n    \"detail\": null\n  }\n]"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

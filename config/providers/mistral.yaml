@@ -1,0 +1,15 @@
+provider_id: mistral
+display_name: Mistral AI
+enabled: true
+api_key_env: MISTRAL_API_KEY
+base_url: null
+default_model: mistral-small-latest
+available_models:
+  - mistral-large-latest
+  - mistral-medium-latest
+  - mistral-small-latest
+  - codestral-latest
+  - open-mixtral-8x7b
+max_tokens_limit: 8192
+default_temperature: 0.7
+timeout_seconds: 60

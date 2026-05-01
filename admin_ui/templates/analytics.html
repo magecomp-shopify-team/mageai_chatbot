@@ -1,0 +1,454 @@
+{% extends "base.html" %}
+{% block title %}Analytics — Chatbot Admin{% endblock %}
+{% block breadcrumb %}Analytics{% endblock %}
+
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="page-header-left">
+    <h1 class="page-title">Analytics</h1>
+    <p class="page-subtitle">Sessions, tokens, user satisfaction, and system activity</p>
+  </div>
+  <div class="page-header-actions">
+    <div class="range-btns">
+      <a href="?range=7"   class="range-btn {% if date_range == '7'   %}active{% endif %}">7d</a>
+      <a href="?range=30"  class="range-btn {% if date_range == '30'  %}active{% endif %}">30d</a>
+      <a href="?range=90"  class="range-btn {% if date_range == '90'  %}active{% endif %}">90d</a>
+      <a href="?range=all" class="range-btn {% if date_range == 'all' %}active{% endif %}">All</a>
+    </div>
+    <button class="btn" onclick="location.reload()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.38-4.4"/></svg>
+      Refresh
+    </button>
+  </div>
+</div>
+
+<!-- KPI Cards -->
+<div class="kpi-grid">
+  <div class="kpi-card">
+    <div class="kpi-val">{{ total_sessions }}</div>
+    <div class="kpi-label">Total Sessions</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-val" style="color:var(--success)">{{ live_sessions }}</div>
+    <div class="kpi-label">Live Now</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-val">{{ total_users }}</div>
+    <div class="kpi-label">Unique Users</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-val">{{ total_messages }}</div>
+    <div class="kpi-label">Messages Sent</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-val">{{ "{:,}".format(total_tokens) }}</div>
+    <div class="kpi-label">Total Tokens</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-val">{{ avg_messages }}</div>
+    <div class="kpi-label">Avg Msgs/Session</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-val" style="font-size:1.1rem;">{{ avg_duration }}</div>
+    <div class="kpi-label">Avg Session Duration</div>
+  </div>
+</div>
+
+<!-- Sessions over time -->
+<div class="section-header"><h3 class="section-title">Sessions &amp; Messages Over Time</h3></div>
+<div class="chart-card mb-4" style="margin-bottom:16px;">
+  <canvas id="timelineChart" height="90"></canvas>
+</div>
+
+<!-- Device & Browser -->
+<div class="section-header"><h3 class="section-title">Device &amp; Browser Breakdown</h3></div>
+<div class="analytics-grid-2" style="margin-bottom:16px;">
+  <div class="chart-card">
+    <div class="chart-label">Device Type</div>
+    <canvas id="deviceChart" height="200"></canvas>
+  </div>
+  <div class="chart-card">
+    <div class="chart-label">Browser</div>
+    <canvas id="browserChart" height="200"></canvas>
+  </div>
+</div>
+
+<!-- Token usage -->
+<div class="section-header"><h3 class="section-title">Token Usage by App</h3></div>
+<div class="chart-card" style="margin-bottom:16px;">
+  <canvas id="tokenChart" height="90"></canvas>
+</div>
+
+<div class="table-wrap" style="margin-bottom:24px;">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>App</th>
+        <th>Total Tokens</th>
+        <th>Total Turns</th>
+        <th>Avg Tokens/Turn</th>
+        <th>Avg Tokens/Session</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for row in token_summary %}
+    <tr>
+      <td><code>{{ row[0] }}</code></td>
+      <td>{{ "{:,}".format(row[1] | int) }}</td>
+      <td>{{ row[2] }}</td>
+      <td>{{ "%.1f"|format(row[3]) }}</td>
+      <td>{{ "%.1f"|format(row[4]) }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5" class="text-muted text-sm" style="padding:20px;">No token data yet.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- User Satisfaction -->
+<div class="section-header"><h3 class="section-title">User Satisfaction</h3></div>
+<div class="analytics-grid-2" style="margin-bottom:16px;">
+  <div class="chart-card">
+    <div class="chart-label">Rating Distribution</div>
+    <canvas id="ratingChart" height="200"></canvas>
+  </div>
+  <div class="chart-card" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;">
+    <div class="avg-rating-display">{{ avg_emoji.split(' ')[0] }}</div>
+    <div style="font-size:2rem;font-weight:700;color:var(--primary)">{{ avg_rating }} / 5</div>
+    <div class="text-muted text-sm">Average Rating · {{ total_reviews }} total reviews</div>
+  </div>
+</div>
+
+<div class="table-wrap" style="margin-bottom:24px;">
+  <table class="table">
+    <thead><tr><th>Session</th><th>Emoji</th><th>Rating</th><th>Comment</th><th>Date</th></tr></thead>
+    <tbody>
+    {% for row in recent_reviews %}
+    <tr>
+      <td><code style="font-size:11px;">{{ row[0][:12] }}…</code></td>
+      <td>{{ row[1] or '—' }}</td>
+      <td>{{ '★' * row[2] }}{{ '☆' * (5 - row[2]) }}</td>
+      <td class="text-sm text-muted" style="max-width:260px;">{{ row[4] or '—' }}</td>
+      <td class="text-muted text-xs" style="white-space:nowrap;">{{ row[3] }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5" class="text-muted text-sm" style="padding:20px;">No reviews yet.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Top URLs -->
+<div class="section-header"><h3 class="section-title">Top Entry &amp; Exit URLs</h3></div>
+<div class="analytics-grid-2" style="margin-bottom:24px;">
+  <div class="table-wrap">
+    <table class="table">
+      <thead><tr><th>#</th><th>Entry URL</th><th>Sessions</th></tr></thead>
+      <tbody>
+      {% for url, cnt in top_entry_urls %}
+      <tr>
+        <td class="text-muted text-sm">{{ loop.index }}</td>
+        <td class="text-sm" style="word-break:break-all;">{{ url }}</td>
+        <td>{{ cnt }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="3" class="text-muted text-sm" style="padding:16px;">No data.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="table-wrap">
+    <table class="table">
+      <thead><tr><th>#</th><th>Exit URL</th><th>Sessions</th></tr></thead>
+      <tbody>
+      {% for url, cnt in top_exit_urls %}
+      <tr>
+        <td class="text-muted text-sm">{{ loop.index }}</td>
+        <td class="text-sm" style="word-break:break-all;">{{ url }}</td>
+        <td>{{ cnt }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="3" class="text-muted text-sm" style="padding:16px;">No data.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- IP Activity -->
+<div class="section-header"><h3 class="section-title">IP Address Activity</h3></div>
+<div class="table-wrap" style="margin-bottom:24px;">
+  <table class="table">
+    <thead>
+      <tr><th>IP Address</th><th>Sessions</th><th>Audit Hits</th><th>Apps</th><th>Last Seen</th><th>Flag</th></tr>
+    </thead>
+    <tbody>
+    {% for row in ip_table %}
+    <tr class="{% if row.high_freq %}row-danger{% endif %}">
+      <td><code>{{ row.ip }}</code></td>
+      <td>{{ row.session_cnt }}</td>
+      <td>{{ row.audit_cnt }}</td>
+      <td class="text-muted text-sm">{{ row.apps }}</td>
+      <td class="text-muted text-xs">{{ row.last_seen }}</td>
+      <td>
+        {% if row.high_freq %}
+        <span class="badge badge-red">HIGH FREQ</span>
+        {% endif %}
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="6" class="text-muted text-sm" style="padding:20px;">No session IP data.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Audit Log -->
+<div class="section-header">
+  <h3 class="section-title">Audit Log</h3>
+  <span class="text-muted text-sm">{{ audit_total }} entries</span>
+</div>
+
+<div class="table-wrap" style="margin-bottom:8px;">
+  <form class="filter-row" method="get" id="auditFilterForm">
+    <input type="hidden" name="range" value="{{ date_range }}">
+    <input type="hidden" name="sess_page" value="{{ sessions_page }}">
+    <select class="form-control" name="audit_action" style="width:auto;font-size:12px;" onchange="document.getElementById('auditFilterForm').submit()">
+      <option value="">All actions</option>
+      {% for a in action_types %}
+      <option value="{{ a }}" {% if audit_action_filter == a %}selected{% endif %}>{{ a }}</option>
+      {% endfor %}
+    </select>
+    <select class="form-control" name="audit_success" style="width:auto;font-size:12px;" onchange="document.getElementById('auditFilterForm').submit()">
+      <option value="">All status</option>
+      <option value="1" {% if audit_success_filter == '1' %}selected{% endif %}>Success</option>
+      <option value="0" {% if audit_success_filter == '0' %}selected{% endif %}>Failed</option>
+    </select>
+  </form>
+  <table class="table">
+    <thead>
+      <tr><th>Timestamp</th><th>User</th><th>Action</th><th>Target</th><th>IP</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+    {% for row in audit_rows %}
+    <tr class="{% if not row[5] %}row-danger{% endif %}">
+      <td class="text-muted text-xs" style="white-space:nowrap;">{{ row[0] }}</td>
+      <td class="fw-600 text-sm">{{ row[1] }}</td>
+      <td><code>{{ row[2] }}</code></td>
+      <td class="text-muted text-sm">{{ row[3] or '—' }}</td>
+      <td class="text-muted text-sm">{{ row[4] or '—' }}</td>
+      <td>
+        {% if row[5] %}
+        <span class="badge badge-green"><span class="badge-dot"></span>OK</span>
+        {% else %}
+        <span class="badge badge-red"><span class="badge-dot"></span>FAIL</span>
+        {% endif %}
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="6" class="text-muted text-sm" style="padding:20px;">No audit entries.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  <div class="pagination">
+    <span class="text-muted text-sm">Page {{ audit_page }} / {{ audit_pages }}</span>
+    {% for p in range(1, audit_pages + 1) %}
+      {% if p <= 3 or p > audit_pages - 3 or (p >= audit_page - 2 and p <= audit_page + 2) %}
+      <a href="?range={{ date_range }}&audit_page={{ p }}&audit_action={{ audit_action_filter }}&audit_success={{ audit_success_filter }}&sess_page={{ sessions_page }}"
+         class="page-btn {% if p == audit_page %}active{% endif %}">{{ p }}</a>
+      {% elif p == 4 or p == audit_pages - 3 %}
+      <span class="page-sep">…</span>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Recent Sessions -->
+<div class="section-header" style="margin-top:24px;">
+  <h3 class="section-title">Recent Sessions</h3>
+  <span class="text-muted text-sm">{{ sess_total }} total</span>
+</div>
+
+<div class="table-wrap" style="margin-bottom:8px;">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Session ID</th><th>App</th><th>User</th><th>Started</th>
+        <th>Msgs</th><th>Device</th><th>Browser</th><th>Status</th><th>Rating</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for row in recent_sessions %}
+    <tr class="clickable" onclick="openSessionDrawer('{{ row[0] }}', '{{ row[1] }}')">
+      <td><code style="font-size:11px;">{{ row[0][:14] }}…</code></td>
+      <td><span class="badge badge-indigo">{{ row[1] }}</span></td>
+      <td class="text-sm">{{ row[2] or '—' }}</td>
+      <td class="text-muted text-xs" style="white-space:nowrap;">{{ row[3] }}</td>
+      <td class="text-sm">{{ row[4] or 0 }}</td>
+      <td class="text-muted text-sm">{{ row[5] or '—' }}</td>
+      <td class="text-muted text-sm">{{ row[6] or '—' }}</td>
+      <td>
+        {% if row[7] %}
+        <span class="badge badge-green"><span class="badge-dot"></span>Live</span>
+        {% else %}
+        <span class="badge badge-gray"><span class="badge-dot"></span>Offline</span>
+        {% endif %}
+      </td>
+      <td class="text-sm">
+        {% if row[8] %}
+          <span {% if row[10] %}title="{{ row[10] }}" style="cursor:help;border-bottom:1px dotted var(--text-muted);"{% endif %}>
+            {{ row[9] or '' }} {{ '★' * row[8] }}
+          </span>
+        {% else %}—{% endif %}
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="9" class="text-muted text-sm" style="padding:20px;">No sessions yet.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  <div class="pagination">
+    <span class="text-muted text-sm">Page {{ sessions_page }} / {{ sess_pages }}</span>
+    {% for p in range(1, sess_pages + 1) %}
+      {% if p <= 3 or p > sess_pages - 3 or (p >= sessions_page - 2 and p <= sessions_page + 2) %}
+      <a href="?range={{ date_range }}&sess_page={{ p }}&audit_page={{ audit_page }}&audit_action={{ audit_action_filter }}&audit_success={{ audit_success_filter }}"
+         class="page-btn {% if p == sessions_page %}active{% endif %}">{{ p }}</a>
+      {% elif p == 4 or p == sess_pages - 3 %}
+      <span class="page-sep">…</span>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Session Drawer -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="sessionDrawer">
+  <div class="drawer-header">
+    <span class="drawer-title" id="drawerTitle">Session</span>
+    <button class="btn btn-ghost btn-sm" onclick="closeDrawer()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      Close
+    </button>
+  </div>
+  <div class="drawer-body" id="drawerContent">
+    <p class="text-muted text-sm">Loading…</p>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+<script>
+const CHART_TICK = '#64748B';
+const CHART_GRID = '#1E2D45';
+const CHART_GRID_LIGHT = '#263548';
+
+// Timeline
+new Chart(document.getElementById('timelineChart'), {
+  type: 'line',
+  data: {
+    labels: {{ timeline_labels | safe }},
+    datasets: [
+      { label: 'Sessions', data: {{ timeline_sessions | safe }},
+        borderColor: '#6366F1', backgroundColor: 'rgba(99,102,241,0.12)',
+        fill: true, tension: 0.35, pointRadius: 3 },
+      { label: 'Messages', data: {{ timeline_messages | safe }},
+        borderColor: '#10B981', backgroundColor: 'rgba(16,185,129,0.08)',
+        fill: true, tension: 0.35, pointRadius: 3 },
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { labels: { color: CHART_TICK, font: { size: 12 } } } },
+    scales: {
+      x: { ticks: { color: CHART_TICK, maxTicksLimit: 10 }, grid: { color: CHART_GRID } },
+      y: { ticks: { color: CHART_TICK }, grid: { color: CHART_GRID_LIGHT }, beginAtZero: true },
+    }
+  }
+});
+
+const PALETTE = ['#6366F1','#10B981','#F59E0B','#EF4444','#06B6D4','#A855F7','#F97316','#14B8A6','#84CC16','#EC4899'];
+
+function donut(id, labels, data, colors) {
+  new Chart(document.getElementById(id), {
+    type: 'doughnut',
+    data: { labels, datasets: [{ data, backgroundColor: colors, borderColor: '#0B0F19', borderWidth: 3 }] },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'right', labels: { color: CHART_TICK, font: { size: 11 }, padding: 10 } },
+        tooltip: { callbacks: { label: ctx => {
+          const t = ctx.dataset.data.reduce((a,b)=>a+b,0);
+          return ` ${ctx.label}: ${ctx.raw} (${t ? ((ctx.raw/t)*100).toFixed(1) : 0}%)`;
+        }}}
+      }
+    }
+  });
+}
+donut('deviceChart',  {{ device_labels | safe }},  {{ device_counts | safe }},  PALETTE);
+donut('browserChart', {{ browser_labels | safe }}, {{ browser_counts | safe }}, PALETTE.slice(3));
+
+// Token chart
+new Chart(document.getElementById('tokenChart'), {
+  type: 'bar',
+  data: { labels: {{ token_days | safe }}, datasets: {{ token_chart_datasets | safe }} },
+  options: {
+    responsive: true,
+    plugins: { legend: { labels: { color: CHART_TICK, font: { size: 11 } } } },
+    scales: {
+      x: { stacked: true, ticks: { color: CHART_TICK, maxTicksLimit: 10 }, grid: { color: CHART_GRID } },
+      y: { stacked: true, ticks: { color: CHART_TICK }, grid: { color: CHART_GRID_LIGHT }, beginAtZero: true },
+    }
+  }
+});
+
+// Rating chart
+new Chart(document.getElementById('ratingChart'), {
+  type: 'bar',
+  data: {
+    labels: {{ rating_labels | safe }},
+    datasets: [{ label: 'Reviews', data: {{ rating_counts | safe }},
+      backgroundColor: ['#EF4444','#F97316','#F59E0B','#10B981','#6366F1'], borderRadius: 5 }]
+  },
+  options: {
+    indexAxis: 'y', responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { ticks: { color: CHART_TICK }, grid: { color: CHART_GRID_LIGHT }, beginAtZero: true },
+      y: { ticks: { color: CHART_TICK }, grid: { color: CHART_GRID } },
+    }
+  }
+});
+
+// Session drawer
+async function openSessionDrawer(sessionId, appId) {
+  document.getElementById('drawerTitle').textContent = 'Session: ' + sessionId.substring(0, 20) + '…';
+  document.getElementById('drawerContent').innerHTML = '<p class="text-muted text-sm" style="text-align:center;padding:20px;">Loading…</p>';
+  openDrawerEl();
+  try {
+    const r = await fetch(`/admin/analytics/session-turns?session_id=${encodeURIComponent(sessionId)}&app_id=${encodeURIComponent(appId)}`);
+    const data = await r.json();
+    if (!data.turns || !data.turns.length) {
+      document.getElementById('drawerContent').innerHTML = '<p class="text-muted text-sm">No turns found.</p>';
+      return;
+    }
+    let html = '';
+    for (const t of data.turns) {
+      const isUser = t.role === 'user';
+      html += `<div class="chat-turn">
+        <div class="chat-meta">${isUser ? '👤 User' : '🤖 Assistant'} &nbsp;·&nbsp; ${esc(t.created_at)} &nbsp;·&nbsp; ${t.token_count} tokens</div>
+        <div class="chat-bubble ${isUser ? 'user' : 'assistant'}">${esc(t.content)}</div>
+      </div>`;
+    }
+    document.getElementById('drawerContent').innerHTML = html;
+  } catch {
+    document.getElementById('drawerContent').innerHTML = '<p class="text-muted text-sm">Failed to load.</p>';
+  }
+}
+</script>
+{% endblock %}

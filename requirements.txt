@@ -1,0 +1,46 @@
+# Web framework
+fastapi>=0.111
+uvicorn[standard]
+python-multipart
+jinja2
+aiofiles
+itsdangerous
+
+# AI providers
+anthropic>=0.49
+openai>=1.30
+google-generativeai>=0.8
+mistralai>=1.0
+cohere>=5.0
+groq>=0.9
+httpx>=0.27
+
+# Vector DB + Embedding
+chromadb>=0.5
+sentence-transformers>=3.0
+
+# Database
+sqlalchemy>=2.0
+aiosqlite
+alembic
+
+# Config + validation
+pydantic>=2.0
+pydantic-settings
+pyyaml
+
+# Token counting
+tiktoken
+
+# Auth + security
+python-jose[cryptography]
+passlib[bcrypt]
+pyotp
+cryptography
+slowapi
+qrcode[pil]
+
+# Dev / testing
+pytest>=8
+pytest-asyncio
+anyio

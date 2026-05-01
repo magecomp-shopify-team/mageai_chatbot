@@ -1,0 +1,13 @@
+# App config schema
+# name: str
+# role: str
+# tone: str
+# rules: list[str]
+# provider: str      — provider_id from config/providers/
+# model: str         — model ID valid for that provider
+# max_history_turns: int    = 6
+# max_chunk_tokens: int     = 800
+# top_k_chunks: int         = 4
+# min_relevance: float      = 0.3
+# max_response_tokens: int  = 512
+# temperature: float        = 0.7

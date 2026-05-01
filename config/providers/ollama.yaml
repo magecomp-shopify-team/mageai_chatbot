@@ -1,0 +1,16 @@
+provider_id: ollama
+display_name: Ollama (Local)
+enabled: true
+api_key_env: null
+base_url: http://localhost:11434
+default_model: llama3.3
+available_models:
+  - llama3.3
+  - mistral
+  - phi4
+  - qwen2.5
+  - deepseek-r1
+  - gemma3
+max_tokens_limit: 4096
+default_temperature: 0.7
+timeout_seconds: 120

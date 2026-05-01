@@ -1,0 +1,701 @@
+════════════════════════════════════════════════════════════════════════
+[2026-04-21 11:46:24.864 IST]  CHAT REQUEST  trace=76806D27D273
+────────────────────────────────────────────────────────────────────────
+  app_id           : limit-qty
+  session_id       : s_mo87yv8c_sb65bf4
+  stream           : True
+  provider_override: None
+  message          : 'How to set up product limit?'
+────────────────────────────────────────────────────────────────────────
+[2026-04-21 11:46:24.893 IST]  ASSEMBLED CONTEXT  trace=76806D27D273
+────────────────────────────────────────────────────────────────────────
+  token_breakdown  : {'system': 170, 'rag': 1200, 'history': 467, 'user': 7}
+  rag              : 4 chunk(s): tmpfdkr5_o9.pdf(rel=0.66), tmpe2vu9ov0.pdf(rel=0.66), tmphompap2w.md(rel=0.65), tmphompap2w.md(rel=0.63)
+  history_turns    : 8
+  system_prompt    :
+    Role: Assistant
+    Tone: Helpfull
+    Rules:
+    - Only answer questions about the KOR Order Limit Quantity Shopify app.
+    - Always provide step-by-step instructions for setup questions.
+    - If a question is outside the app scope, say: "I only support KOR Order Limit Quantity. Please contact MageComp support for other queries."
+    - Never make up features or settings not present in the app documentation.
+    - For troubleshooting, ask the user which limit type they are using before answering.
+    - Always mention clicking Save after any configuration change.
+    - Remind users to click Sync after saving collection limits.
+    - For future limit issues, always check if customer login at checkout is enabled.
+    - Keep responses clear, short, and beginner-friendly.
+    - If a bug or billing issue is reported, direct the user to the Chat with us link inside the app.
+    
+    Context:
+    [tmpfdkr5_o9.pdf]
+    you want to set the purchase limit. Min Limit: Set the min limit. Max Limit: Set the max limit. Multiply Qty: Set the number in whose multiples customers can make a purchase (if needed). Future Limit Qty: Set the limit for future purchase limits (if needed). Suppose you've applied the following limit rules for the variant Red of the Lady Martha Skirt product. According to the above rules, your customers can purchase a minimum of 5 OR a maximum of 10 products of Lady Martha Skirt available in the Red color variant. Once you are done, go to the dashboard of the Product Limit, and the product variant limit will be applied to the selected product variant. Frontend Result: Product/Varian t Min Limit Max Limit Multiply Future Qty Lady Martha Skirt - Red 5 10 5 10 15 16 Global Limit You can set the quantity limits on all the store products. Follow the following steps for applying purchase limits globally. Step #1 Go to Product Limit ➤Global Limit. Step #2 Enter the values for Min Qty Limit and Max Qty Limit in the respective fields. Once you have added the limits, Save your limits. Suppose you set the following limits. Now, according to the above rule, your customers can purchase a minimum of 10 OR a maximum of 20 products from your online store. Global Min Limit Global Max Limit 10 20 17 Collection Limit Applying purchasing limits to all the products listed in your Shopify store is very tedious. This is why our Shopify app has a feature of allows you to apply product limits to an entire collection. You can limit your collection in two ways: 1.Product Limit 2.No. of Product Limit 18 Product Limit This is the functionality that allows you to set purchase limits on individual products falling under the collection you have set the limits on. To apply min & max quantity limits to individual products under collection, follow the following procedure. Go to Collection Limit ➤ Product Limit ➤ Add Limit Step #2 A pop-up of adding limits to collections. Your saved limits will be shown on the main page of the Product Limit in the collections category. Step #1 19 Don't forget to hit the Syncbutton after saving the applied limits. This button ensures that the new products added in the future will follow the same applied limits. Without syncing, the limit will not apply to the new products. Suppose you have set the following limits for products under the Footwear Collection. Let's understand it with a few use cases. Case #1 If a customer wants to buy 5 quantities of Liberty Men's Sneaker and 5 quantities of BRUTON Men Sport Shoes,
+    
+    [tmpe2vu9ov0.pdf]
+    you want to set the purchase limit. Min Limit: Set the min limit. Max Limit: Set the max limit. Multiply Qty: Set the number in whose multiples customers can make a purchase (if needed). Future Limit Qty: Set the limit for future purchase limits (if needed). Suppose you've applied the following limit rules for the variant Red of the Lady Martha Skirt product. According to the above rules, your customers can purchase a minimum of 5 OR a maximum of 10 products of Lady Martha Skirt available in the Red color variant. Once you are done, go to the dashboard of the Product Limit, and the product variant limit will be applied to the selected product variant. Frontend Result: Product/Varian t Min Limit Max Limit Multiply Future Qty Lady Martha Skirt - Red 5 10 5 10 15 16 Global Limit You can set the quantity limits on all the store products. Follow the following steps for applying purchase limits globally. Step #1 Go to Product Limit ➤Global Limit. Step #2 Enter the values for Min Qty Limit and Max Qty Limit in the respective fields. Once you have added the limits, Save your limits. Suppose you set the following limits. Now, according to the above rule, your customers can purchase a minimum of 10 OR a maximum of 20 products from your online store. Global Min Limit Global Max Limit 10 20 17 Collection Limit Applying purchasing limits to all the products listed in your Shopify store is very tedious. This is why our Shopify app has a feature of allows you to apply product limits to an entire collection. You can limit your collection in two ways: 1.Product Limit 2.No. of Product Limit 18 Product Limit This is the functionality that allows you to set purchase limits on individual products falling under the collection you have set the limits on. To apply min & max quantity limits to individual products under collection, follow the following procedure. Go to Collection Limit ➤ Product Limit ➤ Add Limit Step #2 A pop-up of adding limits to collections. Your saved limits will be shown on the main page of the Product Limit in the collections category. Step #1 19 Don't forget to hit the Syncbutton after saving the applied limits. This button ensures that the new products added in the future will follow the same applied limits. Without syncing, the limit will not apply to the new products. Suppose you have set the following limits for products under the Footwear Collection. Let's understand it with a few use cases. Case #1 If a customer wants to buy 5 quantities of Liberty Men's Sneaker and 5 quantities of BRUTON Men Sport Shoes,
+    
+    [tmphompap2w.md]
+    of products in collection limit **Frontend behavior:** A warning message appears at checkout if the limit is violated. --- ### 3.3 PRODUCT LIMIT **Sub-sections:** Product Limit | Variant Limit | Global Limit --- #### 3.3.1 Product Limit (Individual Products) **Purpose:** Set min/max purchase quantity per individual product. Overrides global limits for that product. **How to set:** 1. Go to **Product Limit > Product
+  messages         :
+    [USER] give me features list
+    [ASSISTANT] Of course! Here are the key features of the KOR Order Limit Quantity app:  *   **Product & Variant Limits:** Set minimum and maximum quantity rules for specific products or individual variants. *   **…
+    [USER] give me link of product limit
+    [ASSISTANT] To set up a limit for an individual product, please follow these steps:  1.  In the app, go to the **Product Limit** section in the main menu. 2.  Click on the **Product Limit** tab. 3.  Click the **A…
+    [USER] How do I track my order?
+    [ASSISTANT] I only support KOR Order Limit Quantity. Please contact MageComp support for other queries.
+    [USER] What is the fetucher limit?
+    [ASSISTANT] The Future Limit is a feature that restricts the total quantity of a product a customer can purchase over a period of time. It's great for limited edition items or special promotions.  You can set the…
+    [USER] How to set up product limit?
+────────────────────────────────────────────────────────────────────────
+════════════════════════════════════════════════════════════════════════
+[2026-04-21 11:49:36.305 IST]  CHAT REQUEST  trace=4908527A0850
+────────────────────────────────────────────────────────────────────────
+  app_id           : limit-qty
+  session_id       : s_mo87yv8c_sb65bf4
+  stream           : True
+  provider_override: None
+  message          : 'What are your store hours?'
+────────────────────────────────────────────────────────────────────────
+[2026-04-21 11:49:36.338 IST]  ASSEMBLED CONTEXT  trace=4908527A0850
+────────────────────────────────────────────────────────────────────────
+  token_breakdown  : {'system': 170, 'rag': 1200, 'history': 601, 'user': 6}
+  rag              : 4 chunk(s): tmpfdkr5_o9.pdf(rel=0.35), tmpe2vu9ov0.pdf(rel=0.35), tmpfdkr5_o9.pdf(rel=0.32), tmpe2vu9ov0.pdf(rel=0.32)
+  history_turns    : 10
+  system_prompt    :
+    Role: Assistant
+    Tone: Helpfull
+    Rules:
+    - Only answer questions about the KOR Order Limit Quantity Shopify app.
+    - Always provide step-by-step instructions for setup questions.
+    - If a question is outside the app scope, say: "I only support KOR Order Limit Quantity. Please contact MageComp support for other queries."
+    - Never make up features or settings not present in the app documentation.
+    - For troubleshooting, ask the user which limit type they are using before answering.
+    - Always mention clicking Save after any configuration change.
+    - Remind users to click Sync after saving collection limits.
+    - For future limit issues, always check if customer login at checkout is enabled.
+    - Keep responses clear, short, and beginner-friendly.
+    - If a bug or billing issue is reported, direct the user to the Chat with us link inside the app.
+    
+    Context:
+    [tmpfdkr5_o9.pdf]
+    This means that if your customers purchase any products today, they will not be able to make another purchase until the next 30 days. They can purchase again ONLY after 30 days have passed. The Apply to cancelled orders rule works the same as we discussed above. For example, if you select that checkbox, then your customers who have purchased your product today and canceled it before 30 days will not be able to make a purchase in the next 30 days. Similarly, suppose you don't select that checkbox, then no matter how many customers cancelled their placed purchased orders. In this case, they can still buy the product again before 30 days. Using date interval, the store admin can specify start date & end date for applying limits. The limit will be active for the defined date range. Date Interval 65 According to the above configuration, the limit remains active from Feb 03, 2025, to March 03, 2025. Using days intervals, you can set limits based on intervals in terms of days. It has the following various interval options for applying limits. • Everyday • 10 Days • 20 Days • 30 Days • Every week • Every month • Every year • Custom days Check the following configuration. According to this setting, the limit will be applied in the interval of 30 days from the starting day of 04 Feb 2025 (from 12:00 AM to 11:59 PM). Days Interval 66 For example, if the Future Limit Qty is set to 5. If any customer purchases 4 bottles, then the same customer can purchase one more bottle within those 30 days starting from 04 Feb 2025 because he/she can purchase a total of 5 bottles as per Future Limit Qty. After 30 days, the limit will be reset. Then the same customer can purchase min of 1 or max of 5 bottles as per the configuration. Moreover, if the checkbox Apply to cancelled orders, then the customers whose orders were cancelled in the past won't be able to place orders. 67 Exclude Limit You can apply the limit on the subtotal of your customer's order amount. After applying this limit, this app will ignore any other order limits (if set). After setting the exclude limit, hit the Save button. Suppose you set $200 as the exclude limit, so now other order limits will be ignored if your customer's order exceeds $200. 68 Set priority order for applying limits With this feature, you can easily control which limit priority order your store should consider first. Initially, the following limit priority order is set by default. According to the above priority order, the limit priority gets set like the below order.
+    
+    [tmpe2vu9ov0.pdf]
+    This means that if your customers purchase any products today, they will not be able to make another purchase until the next 30 days. They can purchase again ONLY after 30 days have passed. The Apply to cancelled orders rule works the same as we discussed above. For example, if you select that checkbox, then your customers who have purchased your product today and canceled it before 30 days will not be able to make a purchase in the next 30 days. Similarly, suppose you don't select that checkbox, then no matter how many customers cancelled their placed purchased orders. In this case, they can still buy the product again before 30 days. Using date interval, the store admin can specify start date & end date for applying limits. The limit will be active for the defined date range. Date Interval 65 According to the above configuration, the limit remains active from Feb 03, 2025, to March 03, 2025. Using days intervals, you can set limits based on intervals in terms of days. It has the following various interval options for applying limits. • Everyday • 10 Days • 20 Days • 30 Days • Every week • Every month • Every year • Custom days Check the following configuration. According to this setting, the limit will be applied in the interval of 30 days from the starting day of 04 Feb 2025 (from 12:00 AM to 11:59 PM). Days Interval 66 For example, if the Future Limit Qty is set to 5. If any customer purchases 4 bottles, then the same customer can purchase one more bottle within those 30 days starting from 04 Feb 2025 because he/she can purchase a total of 5 bottles as per Future Limit Qty. After 30 days, the limit will be reset. Then the same customer can purchase min of 1 or max of 5 bottles as per the configuration. Moreover, if the checkbox Apply to cancelled orders, then the customers whose orders were cancelled in the past won't be able to place orders. 67 Exclude Limit You can apply the limit on the subtotal of your customer's order amount. After applying this limit, this app will ignore any other order limits (if set). After setting the exclude limit, hit the Save button. Suppose you set $200 as the exclude limit, so now other order limits will be ignored if your customer's order exceeds $200. 68 Set priority order for applying limits With this feature, you can easily control which limit priority order your store should consider first. Initially, the following limit priority order is set by default. According to the above priority order, the limit priority gets set like the below order.
+    
+    [tmpfdkr5_o9.pdf]
+    25, which has exceeded the max purchase limit of 20. 24 Customer Tag Limit eCommerce stores often have a diverse range of customers, which can be categorized into various customer groups. With this Shopify app, you have the flexibility to implement purchase limits tailored to specific customer groups based on their assigned tags. You can apply these limits using two distinct conditions, allowing for a more customized shopping experience for each group.
+  messages         :
+    [USER] give me features list
+    [ASSISTANT] Of course! Here are the key features of the KOR Order Limit Quantity app:  *   **Product & Variant Limits:** Set minimum and maximum quantity rules for specific products or individual variants. *   **…
+    [USER] give me link of product limit
+    [ASSISTANT] To set up a limit for an individual product, please follow these steps:  1.  In the app, go to the **Product Limit** section in the main menu. 2.  Click on the **Product Limit** tab. 3.  Click the **A…
+    [USER] How do I track my order?
+    [ASSISTANT] I only support KOR Order Limit Quantity. Please contact MageComp support for other queries.
+    [USER] What is the fetucher limit?
+    [ASSISTANT] The Future Limit is a feature that restricts the total quantity of a product a customer can purchase over a period of time. It's great for limited edition items or special promotions.  You can set the…
+    [USER] How to set up product limit?
+    [ASSISTANT] Of course! Here are the step-by-step instructions to set a purchase limit on a specific product:  1.  In the app, go to the **Product Limit** section in the main menu. 2.  Click on the **Product Limit…
+    [USER] What are your store hours?
+────────────────────────────────────────────────────────────────────────
+════════════════════════════════════════════════════════════════════════
+[2026-04-21 17:18:02.003 IST]  CHAT REQUEST  trace=34570ADE4256
+────────────────────────────────────────────────────────────────────────
+  app_id           : whatsapp-notification
+  session_id       : s_mo8jv6vc_wbnpk3w
+  stream           : True
+  provider_override: None
+  message          : 'can i send custom whatsapp message to all customer ?'
+────────────────────────────────────────────────────────────────────────
+[2026-04-21 17:18:02.035 IST]  ASSEMBLED CONTEXT  trace=34570ADE4256
+────────────────────────────────────────────────────────────────────────
+  token_breakdown  : {'system': 173, 'rag': 1200, 'history': 0, 'user': 10}
+  rag              : 4 chunk(s): tmpaatua_d1.pdf(rel=0.56), tmpaatua_d1.pdf(rel=0.54), tmpaatua_d1.pdf(rel=0.37), tmpaatua_d1.pdf(rel=0.33)
+  history_turns    : 0
+  system_prompt    :
+    Role: Assistent
+    Tone: Helpfull
+    Rules:
+    - Only answer questions about the KOOL WhatsApp Notifications Shopify app.
+    - Always provide step-by-step instructions for setup questions.
+    - If a question is outside the app scope, say: "I only support KOOL WhatsApp Notifications. Please contact MageComp support for other queries."
+    - Never make up features or settings not present in the app documentation.
+    - For troubleshooting, ask the user which feature or notification type they are using before answering.
+    - Always mention clicking Save after any configuration change.
+    - Remind users to configure and approve WhatsApp templates properly before sending notifications.
+    - For notification issues, always check if WhatsApp API setup is completed correctly.
+    - Keep responses clear, short, and beginner-friendly.
+    - If a bug or billing issue is reported, direct the user to the Chat with us link inside the app.
+    
+    Context:
+    [tmpaatua_d1.pdf]
+    message would look like below. "Hello admin A new customer has registered on the platform. Name: Mark Aniston Email: anistonmark23@gmail.com" • Template Name: Assign a name to the template. • Language Code: Enter the code of the language in which you want to send notifications. After you are done with all the changes, save your message template. Now, this message will be sent to your customers when their order is delivered to them. 25 Manual Notification If you do not want to set automatic notification messages for your customers, instead you want to send them manually, then this Shopify app allows you to send notifications manually, too. To start with this, you need to follow these steps: Step #1 Go to order / Draft Order Detail Page Step #2 Click on More Actions Step #3 Click on Send WhatsApp Notification 26 Sent Messages This section shows the log of sent messages. Referring to this panel, the merchant can communicate with the customers. It simply shows all the customers & messages sent to them. 27 WhatsApp Chat Button From this section, you can select the appearance and other general settings for your WhatsApp chat button. • WhatsApp Number: Enter the contact number to which you want to receive WhatsApp messages. • WhatsApp Message: Enter the default message that will be displayed to your customers when they click the WhatsApp chat button. • Default WhatsApp Message from visitor: Set the default message for your customers that will be displayed in their text section. • Button Size: Configure the size of the WhatsApp button. • Widget Header: Enter the text you want to display on your widget header for your customers. • Widget Position: Set the position of the widget - Left or Right. • Select Image: Select the icon image for the WhatsApp button. • Widget Status: Set the widget status for the WhatsApp chat button. After making all the changes, Save your changes and done. 28 Share Feature Ideas We accept new ideas & suggestions to implement with our app to make this app more helpful & flexible. Kindly contact us to contribute your idea now. Email* Feature Requests For All MageComp Shopify Apps h8290173@gmail.com Switch account * Indicates required question Your email Select Shopify App* Choose Kindly share your request Your answer Detailed Explanation Your answer 29 You can also reach out to us using any of the following mediums. Email ID:support@magecomp.com WhatsApp:+91 7990 250277 Contact Form:https://magecomp.com/contact We're looking forward to receiving new feature ideas! Never submit passwords through Google Forms. This content is neither created nor endorsed by Google. S ubm it Clear form F o r m s Timestamp Email Address Select Shopify App Kindly share your requesDeta
+    
+    [tmpaatua_d1.pdf]
+    1 KOOL WhatsApp Notifications Enhance customer communication by notifying them about every business activity via WhatsApp with KOOL WhatsApp Notifications, which allows admins to send multiple messages to customers easily. MageCompʼs KOOL WhatsApp Notifications app uses the Official WhatsApp Business API, allowing Shopify admins to send notifications to their customers about their order statuses, such as order confirmation, refund, order delivery, order out for delivery, abandoned cart etc. This app is the best solution for increasing customer satisfaction and brand loyalty. Admins can also send bulk and broadcast messages to their customers to promote their promo offers, store events, discounts, store sales, new product arrivals, etc. 2 General Settings To start using the app for your Shopify store, you need enable the app status and proceed. If you do not want to send messages for POS Orders, then you can disable the field. To activate the WhatsApp Chat button, you need to select the Activate WhatsApp Button. App Status Activate the WhatsApp Chat Button 3 After selecting the button, you will be redirected to your store's theme backend where you need to enable the app embed. 4 In order to configure it, you just need to enter your Access Token so that you can send notifications via WhatsApp to your customers. Once you've entered the access token, click Save button & you're done. Enter the contact number on which you want to receive notifications and updates on customer activities. Settings Admin Notification Contact Detail 5 6 Notification Templates From this Shopify app's backend section, you can easily customize the messages and notifications for sending out to your customers. 1.Customer Notifications 2.Admin Notifications 7 Customer Notifications With this Shopify app, you can send multiple types of notifications to your customers. This notification will be sent to your customers automatically after they've placed the order. • Message Field: Enter the WhatsApp message that you want to send to your customers. You can incorporate variables in the message to make it dynamic. Order Place 8 Variables • {%-order_id-%} • {%-customer_name-%} • {%-shop_email-%} • {%-shop_domain-%} • {%-order_status_page-%} • {%-order_items-%} • {%-order_value-%} • {%-shipping_address-%} As we've included every variable possible in the message template, it will enhance your brand impression as it will give your customers a chance to review their details once again. The above draft message would look like below when delivered to the customer. "Dear, John Matt Your order 12345 of $499 with a Nike Crackle Print TB Tee and Nike Swoosh Pro Flat Peak Cap has been placed successfully. You will get the order tracking information as we ship your order to 1652 Waldeck Street, Cleburne, TX 76031. You can check your order status at https://www.xyzstore.com/order-status. Thank you for shopping with
+    
+    [tmpaatua_d1.pdf]
+    ID is: 52481 Thank You" • Template Name: Assign a name to the template. • Language Code: Enter the code of the language in which you want to send notifications. After you are done with
+  messages         :
+    [USER] can i send custom whatsapp message to all customer ?
+────────────────────────────────────────────────────────────────────────
+════════════════════════════════════════════════════════════════════════
+[2026-04-21 17:29:35.544 IST]  CHAT REQUEST  trace=B43BE2A89973
+────────────────────────────────────────────────────────────────────────
+  app_id           : whatsapp-notification
+  session_id       : s_mo8jv6vc_wbnpk3w
+  stream           : True
+  provider_override: None
+  message          : 'where i can send ? in app ?'
+────────────────────────────────────────────────────────────────────────
+[2026-04-21 17:29:35.583 IST]  ASSEMBLED CONTEXT  trace=B43BE2A89973
+────────────────────────────────────────────────────────────────────────
+  token_breakdown  : {'system': 173, 'rag': 1200, 'history': 92, 'user': 8}
+  rag              : 4 chunk(s): tmpaatua_d1.pdf(rel=0.38), tmpaatua_d1.pdf(rel=0.37), tmpaatua_d1.pdf(rel=0.35), tmpaatua_d1.pdf(rel=0.34)
+  history_turns    : 2
+  system_prompt    :
+    Role: Assistent
+    Tone: Helpfull
+    Rules:
+    - Only answer questions about the KOOL WhatsApp Notifications Shopify app.
+    - Always provide step-by-step instructions for setup questions.
+    - If a question is outside the app scope, say: "I only support KOOL WhatsApp Notifications. Please contact MageComp support for other queries."
+    - Never make up features or settings not present in the app documentation.
+    - For troubleshooting, ask the user which feature or notification type they are using before answering.
+    - Always mention clicking Save after any configuration change.
+    - Remind users to configure and approve WhatsApp templates properly before sending notifications.
+    - For notification issues, always check if WhatsApp API setup is completed correctly.
+    - Keep responses clear, short, and beginner-friendly.
+    - If a bug or billing issue is reported, direct the user to the Chat with us link inside the app.
+    
+    Context:
+    [tmpaatua_d1.pdf]
+    ID is: 52481 Thank You" • Template Name: Assign a name to the template. • Language Code: Enter the code of the language in which you want to send notifications. After you are done with all the changes, save your message template. Now, this message will be sent to your customers when their order is delivered to them. 20 This notification will be received by the admin when a customer registers into the store. • Message Template: Enter the notification message you want to send to your customers by using the following message variables 👇 Variables • {%-customer_name-%} • {%-customer_email-%} The message would look like below. "Hello admin A new customer has registered on the platform. Name: Mark Aniston Email: anistonmark23@gmail.com" • Template Name: Assign a name to the template. Customer Registration Notification to Admin 21 • Language Code: Enter the code of the language in which you want to send notifications. After you are done with all the changes, save your message template. Now, this message will be sent to your customers when their order is delivered to them. 22 Admin Notifications Using this Shopify app, merchants can keep themselves familiar with customer activities like order place & new registrations. That is, notifications are sent to the store admin via WhatsApp medium whenever a new order is placed and any new visitor signs up to the store. This notification will be received by the admin when an order is placed by any customer. • Message Template: Enter the notification message you want to send to your customers by using the following message variables 👇 Order Place Notification to Admin 23 Variables • {%-order_id-%} • {%-customer_name-%} The message would look like below. "Hello Admin You have a New Order on your Shopify Store Order ID is: 52481 Thank You" • Template Name: Assign a name to the template. • Language Code: Enter the code of the language in which you want to send notifications. After you are done with all the changes, save your message template. Now, this message will be sent to your customers when their order is delivered to them. This notification will be received by the admin when a customer registers into the store. Customer Registration Notification to Admin 24 • Message Template: Enter the notification message you want to send to your customers by using the following message variables 👇 Variables • {%-customer_name-%} • {%-customer_email-%} The message would look like below. "Hello admin A new customer has registered on the platform. Name: Mark Aniston Email: anistonmark23@gmail.com" • Template Name: Assign a name to the template. • Language Code: Enter the code of the language in which you want to send notifications. After you are done with
+    
+    [tmpaatua_d1.pdf]
+    message would look like below. "Hello admin A new customer has registered on the platform. Name: Mark Aniston Email: anistonmark23@gmail.com" • Template Name: Assign a name to the template. • Language Code: Enter the code of the language in which you want to send notifications. After you are done with all the changes, save your message template. Now, this message will be sent to your customers when their order is delivered to them. 25 Manual Notification If you do not want to set automatic notification messages for your customers, instead you want to send them manually, then this Shopify app allows you to send notifications manually, too. To start with this, you need to follow these steps: Step #1 Go to order / Draft Order Detail Page Step #2 Click on More Actions Step #3 Click on Send WhatsApp Notification 26 Sent Messages This section shows the log of sent messages. Referring to this panel, the merchant can communicate with the customers. It simply shows all the customers & messages sent to them. 27 WhatsApp Chat Button From this section, you can select the appearance and other general settings for your WhatsApp chat button. • WhatsApp Number: Enter the contact number to which you want to receive WhatsApp messages. • WhatsApp Message: Enter the default message that will be displayed to your customers when they click the WhatsApp chat button. • Default WhatsApp Message from visitor: Set the default message for your customers that will be displayed in their text section. • Button Size: Configure the size of the WhatsApp button. • Widget Header: Enter the text you want to display on your widget header for your customers. • Widget Position: Set the position of the widget - Left or Right. • Select Image: Select the icon image for the WhatsApp button. • Widget Status: Set the widget status for the WhatsApp chat button. After making all the changes, Save your changes and done. 28 Share Feature Ideas We accept new ideas & suggestions to implement with our app to make this app more helpful & flexible. Kindly contact us to contribute your idea now. Email* Feature Requests For All MageComp Shopify Apps h8290173@gmail.com Switch account * Indicates required question Your email Select Shopify App* Choose Kindly share your request Your answer Detailed Explanation Your answer 29 You can also reach out to us using any of the following mediums. Email ID:support@magecomp.com WhatsApp:+91 7990 250277 Contact Form:https://magecomp.com/contact We're looking forward to receiving new feature ideas! Never submit passwords through Google Forms. This content is neither created nor endorsed by Google. S ubm it Clear form F o r m s Timestamp Email Address Select Shopify App Kindly share your requesDeta
+    
+    [tmpaatua_d1.pdf]
+    Email ID:support@magecomp.com WhatsApp:+91 7990 250277 Contact Form:https://magecomp.com/contact We're looking forward to receiving new feature ideas! Never submit passwords through Google Forms. This content is neither created nor endorsed by Google. S ubm it Clear form F o r m s Timestamp Email Address
+  messages         :
+    [USER] can i send custom whatsapp message to all customer ?
+    [ASSISTANT] Yes, with the KOOL WhatsApp Notifications app, you can send bulk and broadcast messages to your customers.  This feature allows you to promote your promo offers, store events, discounts, store sales, …
+    [USER] where i can send ? in app ?
+────────────────────────────────────────────────────────────────────────
+════════════════════════════════════════════════════════════════════════
+[2026-04-21 18:42:19.977 IST]  CHAT REQUEST  trace=400D46A2106A
+────────────────────────────────────────────────────────────────────────
+  app_id           : whatsapp-notification
+  session_id       : s_mo8jv6vc_wbnpk3w
+  stream           : True
+  provider_override: None
+  message          : 'where i can send ? in app ?'
+────────────────────────────────────────────────────────────────────────
+[2026-04-21 18:42:20.347 IST]  ASSEMBLED CONTEXT  trace=400D46A2106A
+────────────────────────────────────────────────────────────────────────
+  token_breakdown  : {'system': 173, 'rag': 1200, 'history': 264, 'user': 8}
+  rag              : 4 chunk(s): tmpaatua_d1.pdf(rel=0.38), tmpaatua_d1.pdf(rel=0.37), tmpaatua_d1.pdf(rel=0.35), tmpaatua_d1.pdf(rel=0.34)
+  history_turns    : 4
+  system_prompt    :
+    Role: Assistent
+    Tone: Helpfull
+    Rules:
+    - Only answer questions about the KOOL WhatsApp Notifications Shopify app.
+    - Always provide step-by-step instructions for setup questions.
+    - If a question is outside the app scope, say: "I only support KOOL WhatsApp Notifications. Please contact MageComp support for other queries."
+    - Never make up features or settings not present in the app documentation.
+    - For troubleshooting, ask the user which feature or notification type they are using before answering.
+    - Always mention clicking Save after any configuration change.
+    - Remind users to configure and approve WhatsApp templates properly before sending notifications.
+    - For notification issues, always check if WhatsApp API setup is completed correctly.
+    - Keep responses clear, short, and beginner-friendly.
+    - If a bug or billing issue is reported, direct the user to the Chat with us link inside the app.
+    
+    Context:
+    [tmpaatua_d1.pdf]
+    ID is: 52481 Thank You" • Template Name: Assign a name to the template. • Language Code: Enter the code of the language in which you want to send notifications. After you are done with all the changes, save your message template. Now, this message will be sent to your customers when their order is delivered to them. 20 This notification will be received by the admin when a customer registers into the store. • Message Template: Enter the notification message you want to send to your customers by using the following message variables 👇 Variables • {%-customer_name-%} • {%-customer_email-%} The message would look like below. "Hello admin A new customer has registered on the platform. Name: Mark Aniston Email: anistonmark23@gmail.com" • Template Name: Assign a name to the template. Customer Registration Notification to Admin 21 • Language Code: Enter the code of the language in which you want to send notifications. After you are done with all the changes, save your message template. Now, this message will be sent to your customers when their order is delivered to them. 22 Admin Notifications Using this Shopify app, merchants can keep themselves familiar with customer activities like order place & new registrations. That is, notifications are sent to the store admin via WhatsApp medium whenever a new order is placed and any new visitor signs up to the store. This notification will be received by the admin when an order is placed by any customer. • Message Template: Enter the notification message you want to send to your customers by using the following message variables 👇 Order Place Notification to Admin 23 Variables • {%-order_id-%} • {%-customer_name-%} The message would look like below. "Hello Admin You have a New Order on your Shopify Store Order ID is: 52481 Thank You" • Template Name: Assign a name to the template. • Language Code: Enter the code of the language in which you want to send notifications. After you are done with all the changes, save your message template. Now, this message will be sent to your customers when their order is delivered to them. This notification will be received by the admin when a customer registers into the store. Customer Registration Notification to Admin 24 • Message Template: Enter the notification message you want to send to your customers by using the following message variables 👇 Variables • {%-customer_name-%} • {%-customer_email-%} The message would look like below. "Hello admin A new customer has registered on the platform. Name: Mark Aniston Email: anistonmark23@gmail.com" • Template Name: Assign a name to the template. • Language Code: Enter the code of the language in which you want to send notifications. After you are done with
+    
+    [tmpaatua_d1.pdf]
+    message would look like below. "Hello admin A new customer has registered on the platform. Name: Mark Aniston Email: anistonmark23@gmail.com" • Template Name: Assign a name to the template. • Language Code: Enter the code of the language in which you want to send notifications. After you are done with all the changes, save your message template. Now, this message will be sent to your customers when their order is delivered to them. 25 Manual Notification If you do not want to set automatic notification messages for your customers, instead you want to send them manually, then this Shopify app allows you to send notifications manually, too. To start with this, you need to follow these steps: Step #1 Go to order / Draft Order Detail Page Step #2 Click on More Actions Step #3 Click on Send WhatsApp Notification 26 Sent Messages This section shows the log of sent messages. Referring to this panel, the merchant can communicate with the customers. It simply shows all the customers & messages sent to them. 27 WhatsApp Chat Button From this section, you can select the appearance and other general settings for your WhatsApp chat button. • WhatsApp Number: Enter the contact number to which you want to receive WhatsApp messages. • WhatsApp Message: Enter the default message that will be displayed to your customers when they click the WhatsApp chat button. • Default WhatsApp Message from visitor: Set the default message for your customers that will be displayed in their text section. • Button Size: Configure the size of the WhatsApp button. • Widget Header: Enter the text you want to display on your widget header for your customers. • Widget Position: Set the position of the widget - Left or Right. • Select Image: Select the icon image for the WhatsApp button. • Widget Status: Set the widget status for the WhatsApp chat button. After making all the changes, Save your changes and done. 28 Share Feature Ideas We accept new ideas & suggestions to implement with our app to make this app more helpful & flexible. Kindly contact us to contribute your idea now. Email* Feature Requests For All MageComp Shopify Apps h8290173@gmail.com Switch account * Indicates required question Your email Select Shopify App* Choose Kindly share your request Your answer Detailed Explanation Your answer 29 You can also reach out to us using any of the following mediums. Email ID:support@magecomp.com WhatsApp:+91 7990 250277 Contact Form:https://magecomp.com/contact We're looking forward to receiving new feature ideas! Never submit passwords through Google Forms. This content is neither created nor endorsed by Google. S ubm it Clear form F o r m s Timestamp Email Address Select Shopify App Kindly share your requesDeta
+    
+    [tmpaatua_d1.pdf]
+    Email ID:support@magecomp.com WhatsApp:+91 7990 250277 Contact Form:https://magecomp.com/contact We're looking forward to receiving new feature ideas! Never submit passwords through Google Forms. This content is neither created nor endorsed by Google. S ubm it Clear form F o r m s Timestamp Email Address
+  messages         :
+    [USER] can i send custom whatsapp message to all customer ?
+    [ASSISTANT] Yes, with the KOOL WhatsApp Notifications app, you can send bulk and broadcast messages to your customers.  This feature allows you to promote your promo offers, store events, discounts, store sales, …
+    [USER] where i can send ? in app ?
+    [ASSISTANT] I can't find a specific "Bulk Message" or "Broadcast" section in the app documentation provided.  The app allows you to send notifications manually for a specific order by following these steps:  1.  …
+    [USER] where i can send ? in app ?
+────────────────────────────────────────────────────────────────────────
+════════════════════════════════════════════════════════════════════════
+[2026-04-22 15:42:16.730 IST]  CHAT REQUEST  trace=1524E6D83FAE
+────────────────────────────────────────────────────────────────────────
+  app_id           : whatsapp-notification
+  session_id       : s_mo9w81bb_ae79ya7
+  stream           : True
+  provider_override: None
+  message          : 'suggest me order template message structure'
+────────────────────────────────────────────────────────────────────────
+[2026-04-22 15:42:20.774 IST]  ASSEMBLED CONTEXT  trace=1524E6D83FAE
+────────────────────────────────────────────────────────────────────────
+  token_breakdown  : {'system': 173, 'rag': 1200, 'history': 0, 'user': 6}
+  rag              : 4 chunk(s): tmpaatua_d1.pdf(rel=0.54), tmpaatua_d1.pdf(rel=0.50), tmpaatua_d1.pdf(rel=0.47), tmpaatua_d1.pdf(rel=0.46)
+  history_turns    : 0
+  system_prompt    :
+    Role: Assistent
+    Tone: Helpfull
+    Rules:
+    - Only answer questions about the KOOL WhatsApp Notifications Shopify app.
+    - Always provide step-by-step instructions for setup questions.
+    - If a question is outside the app scope, say: "I only support KOOL WhatsApp Notifications. Please contact MageComp support for other queries."
+    - Never make up features or settings not present in the app documentation.
+    - For troubleshooting, ask the user which feature or notification type they are using before answering.
+    - Always mention clicking Save after any configuration change.
+    - Remind users to configure and approve WhatsApp templates properly before sending notifications.
+    - For notification issues, always check if WhatsApp API setup is completed correctly.
+    - Keep responses clear, short, and beginner-friendly.
+    - If a bug or billing issue is reported, direct the user to the Chat with us link inside the app.
+    
+    Context:
+    [tmpaatua_d1.pdf]
+    {%-shop_name-%} • {%-customer_name-%} The message would look like below. "Hello, John Matt. Your order 12345 is out for delivery. Thank you for shopping with XYZ Store." • Template Name: Assign a name to the template. • Language Code: Enter the code of the language in which you want to send notifications. After you are done with all the changes, save your message template. Now, this message will be sent to your customer/s when their order shipment has been dispatched for delivery. 16 This notification will be sent to your customers when their orders are delivered to them. • Message Template: Enter the notification message you want to send to your customers by using the following message variables 👇 Variables • {%-order_id-%} • {%-shop_name-%} • {%-customer_name-%} The message would look like below. "Hello, John Matt. Your order 12345 has been delivered. Thank you for shopping with XYZ Store." • Template Name: Assign a name to the template. Order Delivered 17 • Language Code: Enter the code of the language in which you want to send notifications. After you are done with all the changes, save your message template. Now, this message will be sent to your customers when their order is delivered to them. This notification will be sent to your customers when they are supposed to pick up their order. • Message Template: Enter the notification message you want to send to your customers by using the following message variables 👇 Send Pickup Notification 18 Variables • {%-order_id-%} • {%-customer_name-%} The message would look like below. "Hi John, Your order 35678 is ready for pickup! Please visit our location to collect it at your convenience. Thank you for shopping with us!" • Template Name: Assign a name to the template. • Language Code: Enter the code of the language in which you want to send notifications. After you are done with all the changes, save your message template. Now, this message will be sent to your customers when their order is delivered to them. This notification will be received by the admin when an order is placed by any customer. Order Place Notification to Admin 19 • Message Template: Enter the notification message you want to send to your customers by using the following message variables 👇 Variables • {%-order_id-%} • {%-customer_name-%} The message would look like below. "Hello Admin You have a New Order on your Shopify Store Order ID is: 52481 Thank You" • Template Name: Assign a name to the template. • Language Code: Enter the code of the language in which you want to send notifications. After you are done with all the changes, save your message template. Now, this message will be sent to your
+    
+    [tmpaatua_d1.pdf]
+    ID is: 52481 Thank You" • Template Name: Assign a name to the template. • Language Code: Enter the code of the language in which you want to send notifications. After you are done with all the changes, save your message template. Now, this message will be sent to your customers when their order is delivered to them. 20 This notification will be received by the admin when a customer registers into the store. • Message Template: Enter the notification message you want to send to your customers by using the following message variables 👇 Variables • {%-customer_name-%} • {%-customer_email-%} The message would look like below. "Hello admin A new customer has registered on the platform. Name: Mark Aniston Email: anistonmark23@gmail.com" • Template Name: Assign a name to the template. Customer Registration Notification to Admin 21 • Language Code: Enter the code of the language in which you want to send notifications. After you are done with all the changes, save your message template. Now, this message will be sent to your customers when their order is delivered to them. 22 Admin Notifications Using this Shopify app, merchants can keep themselves familiar with customer activities like order place & new registrations. That is, notifications are sent to the store admin via WhatsApp medium whenever a new order is placed and any new visitor signs up to the store. This notification will be received by the admin when an order is placed by any customer. • Message Template: Enter the notification message you want to send to your customers by using the following message variables 👇 Order Place Notification to Admin 23 Variables • {%-order_id-%} • {%-customer_name-%} The message would look like below. "Hello Admin You have a New Order on your Shopify Store Order ID is: 52481 Thank You" • Template Name: Assign a name to the template. • Language Code: Enter the code of the language in which you want to send notifications. After you are done with all the changes, save your message template. Now, this message will be sent to your customers when their order is delivered to them. This notification will be received by the admin when a customer registers into the store. Customer Registration Notification to Admin 24 • Message Template: Enter the notification message you want to send to your customers by using the following message variables 👇 Variables • {%-customer_name-%} • {%-customer_email-%} The message would look like below. "Hello admin A new customer has registered on the platform. Name: Mark Aniston Email: anistonmark23@gmail.com" • Template Name: Assign a name to the template. • Language Code: Enter the code of the language in which you want to send notifications. After you are done with
+    
+    [tmpaatua_d1.pdf]
+    with a Nike Crackle Print TB Tee and Nike Swoosh Pro Flat Peak Cap has been placed successfully. You will get the order tracking information as we ship your order to 1652 Waldeck Street, Cleburne,
+  messages         :
+    [USER] suggest me order template message structure
+────────────────────────────────────────────────────────────────────────
+════════════════════════════════════════════════════════════════════════
+[2026-04-22 16:15:40.853 IST]  CHAT REQUEST  trace=4D059E10F6DB
+────────────────────────────────────────────────────────────────────────
+  app_id           : whatsapp-notification
+  session_id       : s_mo9w81bb_ae79ya7
+  stream           : True
+  provider_override: None
+  message          : 'observre start'
+────────────────────────────────────────────────────────────────────────
+[2026-04-22 16:15:40.911 IST]  ASSEMBLED CONTEXT  trace=4D059E10F6DB
+────────────────────────────────────────────────────────────────────────
+  token_breakdown  : {'system': 173, 'rag': 0, 'history': 376, 'user': 3}
+  rag              : no RAG chunks retrieved
+  history_turns    : 2
+  system_prompt    :
+    Role: Assistent
+    Tone: Helpfull
+    Rules:
+    - Only answer questions about the KOOL WhatsApp Notifications Shopify app.
+    - Always provide step-by-step instructions for setup questions.
+    - If a question is outside the app scope, say: "I only support KOOL WhatsApp Notifications. Please contact MageComp support for other queries."
+    - Never make up features or settings not present in the app documentation.
+    - For troubleshooting, ask the user which feature or notification type they are using before answering.
+    - Always mention clicking Save after any configuration change.
+    - Remind users to configure and approve WhatsApp templates properly before sending notifications.
+    - For notification issues, always check if WhatsApp API setup is completed correctly.
+    - Keep responses clear, short, and beginner-friendly.
+    - If a bug or billing issue is reported, direct the user to the Chat with us link inside the app.
+  messages         :
+    [USER] suggest me order template message structure
+    [ASSISTANT] Of course! Here are some suggested message structures for different order notifications you can set up with the KOOL WhatsApp Notifications app.  ### 1. For Order Confirmation This message is sent to …
+    [USER] observre start
+────────────────────────────────────────────────────────────────────────
+════════════════════════════════════════════════════════════════════════
+[2026-04-22 16:17:07.858 IST]  CHAT REQUEST  trace=82ADF12A7D67
+────────────────────────────────────────────────────────────────────────
+  app_id           : whatsapp-notification
+  session_id       : s_mo9w81bb_ae79ya7
+  stream           : True
+  provider_override: None
+  message          : 'Store hours'
+────────────────────────────────────────────────────────────────────────
+[2026-04-22 16:17:07.908 IST]  ASSEMBLED CONTEXT  trace=82ADF12A7D67
+────────────────────────────────────────────────────────────────────────
+  token_breakdown  : {'system': 173, 'rag': 0, 'history': 396, 'user': 2}
+  rag              : no RAG chunks retrieved
+  history_turns    : 4
+  system_prompt    :
+    Role: Assistent
+    Tone: Helpfull
+    Rules:
+    - Only answer questions about the KOOL WhatsApp Notifications Shopify app.
+    - Always provide step-by-step instructions for setup questions.
+    - If a question is outside the app scope, say: "I only support KOOL WhatsApp Notifications. Please contact MageComp support for other queries."
+    - Never make up features or settings not present in the app documentation.
+    - For troubleshooting, ask the user which feature or notification type they are using before answering.
+    - Always mention clicking Save after any configuration change.
+    - Remind users to configure and approve WhatsApp templates properly before sending notifications.
+    - For notification issues, always check if WhatsApp API setup is completed correctly.
+    - Keep responses clear, short, and beginner-friendly.
+    - If a bug or billing issue is reported, direct the user to the Chat with us link inside the app.
+  messages         :
+    [USER] suggest me order template message structure
+    [ASSISTANT] Of course! Here are some suggested message structures for different order notifications you can set up with the KOOL WhatsApp Notifications app.  ### 1. For Order Confirmation This message is sent to …
+    [USER] observre start
+    [ASSISTANT] I only support KOOL WhatsApp Notifications. Please contact MageComp support for other queries.
+    [USER] Store hours
+────────────────────────────────────────────────────────────────────────
+════════════════════════════════════════════════════════════════════════
+[2026-04-22 16:42:46.535 IST]  CHAT REQUEST  trace=A013D727954B
+────────────────────────────────────────────────────────────────────────
+  app_id           : whatsapp-notification
+  session_id       : s_mo9y7yxb_6c7bg6y
+  stream           : True
+  provider_override: None
+  message          : 'Hi'
+────────────────────────────────────────────────────────────────────────
+[2026-04-22 16:42:46.896 IST]  ASSEMBLED CONTEXT  trace=A013D727954B
+────────────────────────────────────────────────────────────────────────
+  token_breakdown  : {'system': 173, 'rag': 0, 'history': 0, 'user': 1}
+  rag              : no RAG chunks retrieved
+  history_turns    : 0
+  system_prompt    :
+    Role: Assistent
+    Tone: Helpfull
+    Rules:
+    - Only answer questions about the KOOL WhatsApp Notifications Shopify app.
+    - Always provide step-by-step instructions for setup questions.
+    - If a question is outside the app scope, say: "I only support KOOL WhatsApp Notifications. Please contact MageComp support for other queries."
+    - Never make up features or settings not present in the app documentation.
+    - For troubleshooting, ask the user which feature or notification type they are using before answering.
+    - Always mention clicking Save after any configuration change.
+    - Remind users to configure and approve WhatsApp templates properly before sending notifications.
+    - For notification issues, always check if WhatsApp API setup is completed correctly.
+    - Keep responses clear, short, and beginner-friendly.
+    - If a bug or billing issue is reported, direct the user to the Chat with us link inside the app.
+  messages         :
+    [USER] Hi
+────────────────────────────────────────────────────────────────────────
+════════════════════════════════════════════════════════════════════════
+[2026-04-22 16:48:14.599 IST]  CHAT REQUEST  trace=0E67F68B64B2
+────────────────────────────────────────────────────────────────────────
+  app_id           : whatsapp-notification
+  session_id       : s_mo9y7yxb_6c7bg6y
+  stream           : True
+  provider_override: None
+  message          : 'd'
+────────────────────────────────────────────────────────────────────────
+[2026-04-22 16:48:14.655 IST]  ASSEMBLED CONTEXT  trace=0E67F68B64B2
+────────────────────────────────────────────────────────────────────────
+  token_breakdown  : {'system': 173, 'rag': 0, 'history': 17, 'user': 1}
+  rag              : no RAG chunks retrieved
+  history_turns    : 2
+  system_prompt    :
+    Role: Assistent
+    Tone: Helpfull
+    Rules:
+    - Only answer questions about the KOOL WhatsApp Notifications Shopify app.
+    - Always provide step-by-step instructions for setup questions.
+    - If a question is outside the app scope, say: "I only support KOOL WhatsApp Notifications. Please contact MageComp support for other queries."
+    - Never make up features or settings not present in the app documentation.
+    - For troubleshooting, ask the user which feature or notification type they are using before answering.
+    - Always mention clicking Save after any configuration change.
+    - Remind users to configure and approve WhatsApp templates properly before sending notifications.
+    - For notification issues, always check if WhatsApp API setup is completed correctly.
+    - Keep responses clear, short, and beginner-friendly.
+    - If a bug or billing issue is reported, direct the user to the Chat with us link inside the app.
+  messages         :
+    [USER] Hi
+    [ASSISTANT] Hello! How can I help you with the KOOL WhatsApp Notifications app today?
+    [USER] d
+────────────────────────────────────────────────────────────────────────
+════════════════════════════════════════════════════════════════════════
+[2026-04-22 19:47:54.890 IST]  CHAT REQUEST  trace=848BC05BD5C4
+────────────────────────────────────────────────────────────────────────
+  app_id           : whatsapp-notification
+  session_id       : s_mo8jv6vc_wbnpk3w
+  stream           : True
+  provider_override: None
+  message          : 's'
+────────────────────────────────────────────────────────────────────────
+[2026-04-22 19:47:58.066 IST]  ASSEMBLED CONTEXT  trace=848BC05BD5C4
+────────────────────────────────────────────────────────────────────────
+  token_breakdown  : {'system': 173, 'rag': 0, 'history': 462, 'user': 1}
+  rag              : no RAG chunks retrieved
+  history_turns    : 6
+  system_prompt    :
+    Role: Assistent
+    Tone: Helpfull
+    Rules:
+    - Only answer questions about the KOOL WhatsApp Notifications Shopify app.
+    - Always provide step-by-step instructions for setup questions.
+    - If a question is outside the app scope, say: "I only support KOOL WhatsApp Notifications. Please contact MageComp support for other queries."
+    - Never make up features or settings not present in the app documentation.
+    - For troubleshooting, ask the user which feature or notification type they are using before answering.
+    - Always mention clicking Save after any configuration change.
+    - Remind users to configure and approve WhatsApp templates properly before sending notifications.
+    - For notification issues, always check if WhatsApp API setup is completed correctly.
+    - Keep responses clear, short, and beginner-friendly.
+    - If a bug or billing issue is reported, direct the user to the Chat with us link inside the app.
+  messages         :
+    [USER] can i send custom whatsapp message to all customer ?
+    [ASSISTANT] Yes, with the KOOL WhatsApp Notifications app, you can send bulk and broadcast messages to your customers.  This feature allows you to promote your promo offers, store events, discounts, store sales, …
+    [USER] where i can send ? in app ?
+    [ASSISTANT] I can't find a specific "Bulk Message" or "Broadcast" section in the app documentation provided.  The app allows you to send notifications manually for a specific order by following these steps:  1.  …
+    [USER] where i can send ? in app ?
+    [ASSISTANT] Based on the documentation, you can send a manual WhatsApp notification for a specific order directly from your Shopify admin.  Here are the steps:  1.  From your Shopify admin, go to the **Orders** s…
+    [USER] s
+────────────────────────────────────────────────────────────────────────
+════════════════════════════════════════════════════════════════════════
+[2026-04-22 19:48:38.616 IST]  CHAT REQUEST  trace=FDBAECBE82DD
+────────────────────────────────────────────────────────────────────────
+  app_id           : whatsapp-notification
+  session_id       : s_mo8jv6vc_wbnpk3w
+  stream           : True
+  provider_override: None
+  message          : 'How are you?'
+────────────────────────────────────────────────────────────────────────
+[2026-04-22 19:48:38.659 IST]  ASSEMBLED CONTEXT  trace=FDBAECBE82DD
+────────────────────────────────────────────────────────────────────────
+  token_breakdown  : {'system': 173, 'rag': 0, 'history': 491, 'user': 4}
+  rag              : no RAG chunks retrieved
+  history_turns    : 8
+  system_prompt    :
+    Role: Assistent
+    Tone: Helpfull
+    Rules:
+    - Only answer questions about the KOOL WhatsApp Notifications Shopify app.
+    - Always provide step-by-step instructions for setup questions.
+    - If a question is outside the app scope, say: "I only support KOOL WhatsApp Notifications. Please contact MageComp support for other queries."
+    - Never make up features or settings not present in the app documentation.
+    - For troubleshooting, ask the user which feature or notification type they are using before answering.
+    - Always mention clicking Save after any configuration change.
+    - Remind users to configure and approve WhatsApp templates properly before sending notifications.
+    - For notification issues, always check if WhatsApp API setup is completed correctly.
+    - Keep responses clear, short, and beginner-friendly.
+    - If a bug or billing issue is reported, direct the user to the Chat with us link inside the app.
+  messages         :
+    [USER] can i send custom whatsapp message to all customer ?
+    [ASSISTANT] Yes, with the KOOL WhatsApp Notifications app, you can send bulk and broadcast messages to your customers.  This feature allows you to promote your promo offers, store events, discounts, store sales, …
+    [USER] where i can send ? in app ?
+    [ASSISTANT] I can't find a specific "Bulk Message" or "Broadcast" section in the app documentation provided.  The app allows you to send notifications manually for a specific order by following these steps:  1.  …
+    [USER] where i can send ? in app ?
+    [ASSISTANT] Based on the documentation, you can send a manual WhatsApp notification for a specific order directly from your Shopify admin.  Here are the steps:  1.  From your Shopify admin, go to the **Orders** s…
+    [USER] s
+    [ASSISTANT] How can I help you with the KOOL WhatsApp Notifications app? Please let me know if you have any questions about its features or setup.
+    [USER] How are you?
+────────────────────────────────────────────────────────────────────────
+════════════════════════════════════════════════════════════════════════
+[2026-04-22 20:04:46.727 IST]  CHAT REQUEST  trace=CA9BF9006A6C
+────────────────────────────────────────────────────────────────────────
+  app_id           : whatsapp-notification
+  session_id       : s_mo8jv6vc_wbnpk3w
+  stream           : True
+  provider_override: None
+  message          : 'Store hours'
+────────────────────────────────────────────────────────────────────────
+[2026-04-22 20:04:47.460 IST]  ASSEMBLED CONTEXT  trace=CA9BF9006A6C
+────────────────────────────────────────────────────────────────────────
+  token_breakdown  : {'system': 173, 'rag': 0, 'history': 525, 'user': 2}
+  rag              : no RAG chunks retrieved
+  history_turns    : 10
+  system_prompt    :
+    Role: Assistent
+    Tone: Helpfull
+    Rules:
+    - Only answer questions about the KOOL WhatsApp Notifications Shopify app.
+    - Always provide step-by-step instructions for setup questions.
+    - If a question is outside the app scope, say: "I only support KOOL WhatsApp Notifications. Please contact MageComp support for other queries."
+    - Never make up features or settings not present in the app documentation.
+    - For troubleshooting, ask the user which feature or notification type they are using before answering.
+    - Always mention clicking Save after any configuration change.
+    - Remind users to configure and approve WhatsApp templates properly before sending notifications.
+    - For notification issues, always check if WhatsApp API setup is completed correctly.
+    - Keep responses clear, short, and beginner-friendly.
+    - If a bug or billing issue is reported, direct the user to the Chat with us link inside the app.
+  messages         :
+    [USER] can i send custom whatsapp message to all customer ?
+    [ASSISTANT] Yes, with the KOOL WhatsApp Notifications app, you can send bulk and broadcast messages to your customers.  This feature allows you to promote your promo offers, store events, discounts, store sales, …
+    [USER] where i can send ? in app ?
+    [ASSISTANT] I can't find a specific "Bulk Message" or "Broadcast" section in the app documentation provided.  The app allows you to send notifications manually for a specific order by following these steps:  1.  …
+    [USER] where i can send ? in app ?
+    [ASSISTANT] Based on the documentation, you can send a manual WhatsApp notification for a specific order directly from your Shopify admin.  Here are the steps:  1.  From your Shopify admin, go to the **Orders** s…
+    [USER] s
+    [ASSISTANT] How can I help you with the KOOL WhatsApp Notifications app? Please let me know if you have any questions about its features or setup.
+    [USER] How are you?
+    [ASSISTANT] I am an assistant designed to help you with the KOOL WhatsApp Notifications app.  How can I assist you with setting up notifications or other features today?
+    [USER] Store hours
+────────────────────────────────────────────────────────────────────────
+════════════════════════════════════════════════════════════════════════
+[2026-04-24 18:30:27.232 IST]  CHAT REQUEST  trace=65E4A6CB6C08
+────────────────────────────────────────────────────────────────────────
+  app_id           : whatsapp-notification
+  session_id       : s_mocwrjbl_pztzgbz
+  stream           : True
+  provider_override: None
+  message          : 'sad'
+────────────────────────────────────────────────────────────────────────
+[2026-04-24 18:30:30.637 IST]  ASSEMBLED CONTEXT  trace=65E4A6CB6C08
+────────────────────────────────────────────────────────────────────────
+  token_breakdown  : {'system': 173, 'rag': 0, 'history': 0, 'user': 1}
+  rag              : no RAG chunks retrieved
+  history_turns    : 0
+  system_prompt    :
+    Role: Assistent
+    Tone: Helpfull
+    Rules:
+    - Only answer questions about the KOOL WhatsApp Notifications Shopify app.
+    - Always provide step-by-step instructions for setup questions.
+    - If a question is outside the app scope, say: "I only support KOOL WhatsApp Notifications. Please contact MageComp support for other queries."
+    - Never make up features or settings not present in the app documentation.
+    - For troubleshooting, ask the user which feature or notification type they are using before answering.
+    - Always mention clicking Save after any configuration change.
+    - Remind users to configure and approve WhatsApp templates properly before sending notifications.
+    - For notification issues, always check if WhatsApp API setup is completed correctly.
+    - Keep responses clear, short, and beginner-friendly.
+    - If a bug or billing issue is reported, direct the user to the Chat with us link inside the app.
+  messages         :
+    [USER] sad
+────────────────────────────────────────────────────────────────────────
+════════════════════════════════════════════════════════════════════════
+[2026-04-24 18:37:38.411 IST]  CHAT REQUEST  trace=2BD2F7279377
+────────────────────────────────────────────────────────────────────────
+  app_id           : whatsapp-notification
+  session_id       : s_mocwrjbl_pztzgbz
+  stream           : True
+  provider_override: None
+  message          : 'sd'
+────────────────────────────────────────────────────────────────────────
+[2026-04-24 18:37:38.480 IST]  ASSEMBLED CONTEXT  trace=2BD2F7279377
+────────────────────────────────────────────────────────────────────────
+  token_breakdown  : {'system': 173, 'rag': 0, 'history': 18, 'user': 1}
+  rag              : no RAG chunks retrieved
+  history_turns    : 2
+  system_prompt    :
+    Role: Assistent
+    Tone: Helpfull
+    Rules:
+    - Only answer questions about the KOOL WhatsApp Notifications Shopify app.
+    - Always provide step-by-step instructions for setup questions.
+    - If a question is outside the app scope, say: "I only support KOOL WhatsApp Notifications. Please contact MageComp support for other queries."
+    - Never make up features or settings not present in the app documentation.
+    - For troubleshooting, ask the user which feature or notification type they are using before answering.
+    - Always mention clicking Save after any configuration change.
+    - Remind users to configure and approve WhatsApp templates properly before sending notifications.
+    - For notification issues, always check if WhatsApp API setup is completed correctly.
+    - Keep responses clear, short, and beginner-friendly.
+    - If a bug or billing issue is reported, direct the user to the Chat with us link inside the app.
+  messages         :
+    [USER] sad
+    [ASSISTANT] I only support KOOL WhatsApp Notifications. Please contact MageComp support for other queries.
+    [USER] sd
+────────────────────────────────────────────────────────────────────────
+════════════════════════════════════════════════════════════════════════
+[2026-04-24 18:38:07.287 IST]  CHAT REQUEST  trace=D7A54C9C3B8A
+────────────────────────────────────────────────────────────────────────
+  app_id           : whatsapp-notification
+  session_id       : s_mocwrjbl_pztzgbz
+  stream           : True
+  provider_override: None
+  message          : 'Track my order'
+────────────────────────────────────────────────────────────────────────
+[2026-04-24 18:38:07.372 IST]  ASSEMBLED CONTEXT  trace=D7A54C9C3B8A
+────────────────────────────────────────────────────────────────────────
+  token_breakdown  : {'system': 173, 'rag': 1200, 'history': 36, 'user': 3}
+  rag              : 3 chunk(s): tmpaatua_d1.pdf(rel=0.45), tmpaatua_d1.pdf(rel=0.37), tmpaatua_d1.pdf(rel=0.31)
+  history_turns    : 4
+  system_prompt    :
+    Role: Assistent
+    Tone: Helpfull
+    Rules:
+    - Only answer questions about the KOOL WhatsApp Notifications Shopify app.
+    - Always provide step-by-step instructions for setup questions.
+    - If a question is outside the app scope, say: "I only support KOOL WhatsApp Notifications. Please contact MageComp support for other queries."
+    - Never make up features or settings not present in the app documentation.
+    - For troubleshooting, ask the user which feature or notification type they are using before answering.
+    - Always mention clicking Save after any configuration change.
+    - Remind users to configure and approve WhatsApp templates properly before sending notifications.
+    - For notification issues, always check if WhatsApp API setup is completed correctly.
+    - Keep responses clear, short, and beginner-friendly.
+    - If a bug or billing issue is reported, direct the user to the Chat with us link inside the app.
+    
+    Context:
+    [tmpaatua_d1.pdf]
+    with a Nike Crackle Print TB Tee and Nike Swoosh Pro Flat Peak Cap has been placed successfully. You will get the order tracking information as we ship your order to 1652 Waldeck Street, Cleburne, TX 76031. You can check your order status at https://www.xyzstore.com/order-status. Thank you for shopping with XYZStore.com. If you have any concerns regarding your order, you can contact us at support@xyzstore.com." • Template Name: Assign a name to the template. • Language Code: Enter the code of the language in which you want to send notifications. After you're done with all the changes, save the message template. Now, this message will be sent to every customer when he/she places the order. This message will be sent to your customers when they request a refund on their order, and it is processed successfully. Order Refund 9 • Message Template: Enter the message that you want to send to your customers after their refund request is processed successfully. Variables • {%-order_id-%} • {%-amount-%} • {%-shop_name-%} Suppose, the message would look like as below when sent to the customer. "Hello, 65677. Your order refund of $499 has been processed successfully by XYZ Store. You can expect the full refund within 7 business days." • Template Name: Assign a name to the template. • Language Code: Enter the code of the language in which you want to send notifications. After you are done with all the changes, save your message template. Now, this message will be sent to your customers when their order refund request is resolved. 10 These notifications will be sent to customers if they leave your website without checking out. • Message Template: Enter the notification message you want to send to your customers with these message variables 👇 Abandoned Checkout 11 Variables • {%-customer_name-%} • {%-customer_email-%} • {%-checkout_url-%} • {%-shop_name-%} Suppose, the message would look like as below. "Hello, John Matt. Looks like you forgot to checkout. We have got some good news for you sent to your johnmatt572@gmail.com. Use Coupon code: Magecomp10 for a 10% Discount on your order. Hurry up & grab this discount at your checkout now! https://www.xyzstore.com/checkout/ Thank you for shopping with XYZ Store." • Template Name: Assign a name to the template. • Language Code: Enter the code of the language in which you want to send notifications. After you are done with all the changes, save your message template. Now, this message will be sent to your customers when they leave your website without purchasing anything. Providing discount offers can help you regain those lost customers effectively. This notification will be sent to your customers when you want to request them to review the products they have purchased. Review Request
+    
+    [tmpaatua_d1.pdf]
+    this message will be sent to your customers when they leave your website without purchasing anything. Providing discount offers can help you regain those lost customers effectively. This notification will be sent to your customers when you want to request them to review the products they have purchased. Review Request 12 • Message Template: Enter the notification message you want to send to your customers with these below-mentioned message variables 👇 Variables • {%-order_id-%} • {%-customer_name-%} • {%-product_link-%} • {%-shop_name-%} • {%-product_title-%} The message would look like below. "Hello, John Matt. We hope you enjoyed your recent purchase 12345 from XYZ Store. Your feedback is invaluable to us and other customers. Could you please take a moment to share your thoughts on the Black T-shirt? Visit https://www.xyzstore.com/menswear/black-t-shirt and share your reviews." • Template Name: Assign a name to the template. • Language Code: Enter the code of the language in which you want to send notifications. 13 • Enter Days: Set the number of days after which you want to send a review reminder message to customers. As we've set 7 days, customers will receive a review request notification after 7 days of the purchase transaction. After you are done with all the changes, save your message template. Now, this message will be sent to your customers after the specified days they made the purchase. This notification will be sent to your customers when their order has been confirmed for shipment. • Message Template: Enter the notification message you want to send to your customers. Fulfillment Generate 14 Variables • {%-tracking_url-%} • {%-tracking_number-%} • {%-order_id-%} • {%-customer_name-%} The message would look like the below when sent to the customer in real time. "Hello, John Matt. Your order 56487 package has now been shipped. Your tracking number is ND45R54YF577HJ. You can track your shipment at https://xyzstore.com/track/ND45R54YF577HJ" • Template Name: Assign a name to the template. • Language Code: Enter the code of the language in which you want to send notifications. After you are done with all the changes, save your message template. Now, this message will be sent to your customers when their order is fulfilled & ready to be shipped. This notification will be sent to your customers when their order shipment is out for delivery. Order Out for Delivery 15 • Message Template: Enter the notification message you want to send to your customers. Variables • {%-order_id-%} • {%-shop_name-%} • {%-customer_name-%} The message would look like below. "Hello, John Matt. Your order 12345 is out for delivery. Thank you for shopping with XYZ Store
+  messages         :
+    [USER] sad
+    [ASSISTANT] I only support KOOL WhatsApp Notifications. Please contact MageComp support for other queries.
+    [USER] sd
+    [ASSISTANT] I only support KOOL WhatsApp Notifications. Please contact MageComp support for other queries.
+    [USER] Track my order
+────────────────────────────────────────────────────────────────────────
+════════════════════════════════════════════════════════════════════════
+[2026-04-25 10:23:24.808 IST]  CHAT REQUEST  trace=B63B4B62BD76
+────────────────────────────────────────────────────────────────────────
+  app_id           : whatsapp-notification
+  session_id       : s_mocwrjbl_pztzgbz
+  stream           : True
+  provider_override: None
+  message          : 'asd'
+────────────────────────────────────────────────────────────────────────
+[2026-04-25 10:23:28.259 IST]  ASSEMBLED CONTEXT  trace=B63B4B62BD76
+────────────────────────────────────────────────────────────────────────
+  token_breakdown  : {'system': 173, 'rag': 0, 'history': 56, 'user': 1}
+  rag              : no RAG chunks retrieved
+  history_turns    : 6
+  system_prompt    :
+    Role: Assistent
+    Tone: Helpfull
+    Rules:
+    - Only answer questions about the KOOL WhatsApp Notifications Shopify app.
+    - Always provide step-by-step instructions for setup questions.
+    - If a question is outside the app scope, say: "I only support KOOL WhatsApp Notifications. Please contact MageComp support for other queries."
+    - Never make up features or settings not present in the app documentation.
+    - For troubleshooting, ask the user which feature or notification type they are using before answering.
+    - Always mention clicking Save after any configuration change.
+    - Remind users to configure and approve WhatsApp templates properly before sending notifications.
+    - For notification issues, always check if WhatsApp API setup is completed correctly.
+    - Keep responses clear, short, and beginner-friendly.
+    - If a bug or billing issue is reported, direct the user to the Chat with us link inside the app.
+  messages         :
+    [USER] sad
+    [ASSISTANT] I only support KOOL WhatsApp Notifications. Please contact MageComp support for other queries.
+    [USER] sd
+    [ASSISTANT] I only support KOOL WhatsApp Notifications. Please contact MageComp support for other queries.
+    [USER] Track my order
+    [ASSISTANT] I only support KOOL WhatsApp Notifications. Please contact MageComp support for other queries.
+    [USER] asd
+────────────────────────────────────────────────────────────────────────
+════════════════════════════════════════════════════════════════════════
+[2026-04-25 10:30:40.927 IST]  CHAT REQUEST  trace=6774E631A8B6
+────────────────────────────────────────────────────────────────────────
+  app_id           : whatsapp-notification
+  session_id       : s_mocwrjbl_pztzgbz
+  stream           : True
+  provider_override: None
+  message          : 'sdfsdfsdfsdf'
+────────────────────────────────────────────────────────────────────────
+[2026-04-25 10:30:40.988 IST]  ASSEMBLED CONTEXT  trace=6774E631A8B6
+────────────────────────────────────────────────────────────────────────
+  token_breakdown  : {'system': 173, 'rag': 0, 'history': 74, 'user': 5}
+  rag              : no RAG chunks retrieved
+  history_turns    : 8
+  system_prompt    :
+    Role: Assistent
+    Tone: Helpfull
+    Rules:
+    - Only answer questions about the KOOL WhatsApp Notifications Shopify app.
+    - Always provide step-by-step instructions for setup questions.
+    - If a question is outside the app scope, say: "I only support KOOL WhatsApp Notifications. Please contact MageComp support for other queries."
+    - Never make up features or settings not present in the app documentation.
+    - For troubleshooting, ask the user which feature or notification type they are using before answering.
+    - Always mention clicking Save after any configuration change.
+    - Remind users to configure and approve WhatsApp templates properly before sending notifications.
+    - For notification issues, always check if WhatsApp API setup is completed correctly.
+    - Keep responses clear, short, and beginner-friendly.
+    - If a bug or billing issue is reported, direct the user to the Chat with us link inside the app.
+  messages         :
+    [USER] sad
+    [ASSISTANT] I only support KOOL WhatsApp Notifications. Please contact MageComp support for other queries.
+    [USER] sd
+    [ASSISTANT] I only support KOOL WhatsApp Notifications. Please contact MageComp support for other queries.
+    [USER] Track my order
+    [ASSISTANT] I only support KOOL WhatsApp Notifications. Please contact MageComp support for other queries.
+    [USER] asd
+    [ASSISTANT] I only support KOOL WhatsApp Notifications. Please contact MageComp support for other queries.
+    [USER] sdfsdfsdfsdf
+────────────────────────────────────────────────────────────────────────

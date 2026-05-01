@@ -1,0 +1,13 @@
+provider_id: cohere
+display_name: Cohere
+enabled: true
+api_key_env: COHERE_API_KEY
+base_url: null
+default_model: command-r
+available_models:
+  - command-r-plus
+  - command-r
+  - command-light
+max_tokens_limit: 4096
+default_temperature: 0.7
+timeout_seconds: 60

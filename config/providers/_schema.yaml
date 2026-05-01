@@ -1,0 +1,11 @@
+# Provider config schema — all fields required unless marked optional
+# provider_id: str        — must match class provider_id
+# display_name: str
+# enabled: bool           — default true
+# api_key_env: str|null   — env var name (not value), null for no-auth providers
+# base_url: str|null      — required for openai_compat providers
+# default_model: str
+# available_models: list[str]
+# max_tokens_limit: int
+# default_temperature: float  — default 0.7
+# timeout_seconds: int        — default 60

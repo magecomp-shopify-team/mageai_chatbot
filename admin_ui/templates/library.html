@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}Library — Chatbot Admin{% endblock %}
+{% block breadcrumb %}Document Library{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="page-header-left">
+    <h1 class="page-title">Document Library</h1>
+    <p class="page-subtitle">Manage indexed documents across all apps</p>
+  </div>
+  <div class="page-header-actions">
+    <a href="/admin/upload" class="btn btn-primary">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      Upload New
+    </a>
+  </div>
+</div>
+
+{% for app_id, docs in all_docs.items() %}
+<div class="section">
+  <div class="section-header">
+    <div class="section-title">
+      <div style="width:24px;height:24px;border-radius:6px;background:var(--primary-glow);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">
+        {{ app_id[0].upper() }}
+      </div>
+      {{ app_id }}
+      <span class="badge badge-indigo">{{ docs | length }} doc{% if docs | length != 1 %}s{% endif %}</span>
+    </div>
+    <a href="/admin/chunks?app_id={{ app_id }}" class="btn btn-ghost btn-sm">
+      View Chunks →
+    </a>
+  </div>
+
+  {% if docs %}
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Filename</th>
+          <th>Chunks</th>
+          <th>Indexed At</th>
+          <th style="text-align:right;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for filename, meta in docs.items() %}
+      <tr>
+        <td>
+          <div class="flex items-center gap-2">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span class="fw-600">{{ filename }}</span>
+          </div>
+        </td>
+        <td>
+          <span class="badge badge-gray">{{ meta.chunk_count }} chunks</span>
+        </td>
+        <td class="text-muted text-sm">
+          {% if meta.indexed_at %}
+            {{ meta.indexed_at[:19].replace('T', ' ') }}
+          {% else %}
+            —
+          {% endif %}
+        </td>
+        <td style="text-align:right;">
+          <button class="btn btn-sm btn-danger"
+            onclick="deleteDoc('{{ app_id }}', '{{ filename }}', this)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+            Delete
+          </button>
+        </td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="card">
+    <div class="empty-state">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      <div class="empty-state-title">No documents yet</div>
+      <p class="empty-state-text">Upload a document to start building the knowledge base for <strong>{{ app_id }}</strong>.</p>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% else %}
+<div class="empty-state">
+  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+  <div class="empty-state-title">No apps configured</div>
+  <p class="empty-state-text">Create an app first, then upload documents to its library.</p>
+</div>
+{% endfor %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function deleteDoc(appId, filename, btn) {
+  if (!confirm(`Delete "${filename}" from "${appId}"?\n\nThis will remove all indexed chunks.`)) return;
+  btn.disabled = true;
+  btn.textContent = 'Deleting…';
+  const r = await fetch(`/docs/${appId}/${encodeURIComponent(filename)}`, { method: 'DELETE' });
+  if (r.ok) {
+    toast('Document deleted successfully.', 'success');
+    setTimeout(() => location.reload(), 800);
+  } else {
+    toast('Failed to delete document.', 'error');
+    btn.disabled = false;
+    btn.textContent = 'Delete';
+  }
+}
+</script>
+{% endblock %}

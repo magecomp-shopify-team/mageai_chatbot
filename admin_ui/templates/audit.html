@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% block title %}Audit Log — Chatbot Admin{% endblock %}
+{% block breadcrumb %}Audit Log{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="page-header-left">
+    <h1 class="page-title">Audit Log</h1>
+    <p class="page-subtitle">
+      Append-only record of all admin actions
+      <span class="badge badge-gray" style="margin-left:6px;">{{ total }} entries</span>
+    </p>
+  </div>
+</div>
+
+<!-- Filters -->
+<form method="get" action="/admin/audit" id="filterForm">
+  <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px;">
+    <select class="form-control" name="action" style="width:auto;"
+            onchange="document.getElementById('filterForm').submit()">
+      <option value="">All actions</option>
+      {% for a in action_types %}
+      <option value="{{ a }}" {% if action_filter == a %}selected{% endif %}>{{ a }}</option>
+      {% endfor %}
+    </select>
+
+    <select class="form-control" name="status" style="width:auto;"
+            onchange="document.getElementById('filterForm').submit()">
+      <option value="">All status</option>
+      <option value="1" {% if status_filter == '1' %}selected{% endif %}>Success</option>
+      <option value="0" {% if status_filter == '0' %}selected{% endif %}>Failed</option>
+    </select>
+
+    {% if action_filter or status_filter %}
+    <a href="/admin/audit" class="btn btn-ghost btn-sm">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      Clear filters
+    </a>
+    {% endif %}
+
+    <span class="text-muted text-sm" style="margin-left:auto;">
+      Page {{ page }} of {{ total_pages }} &nbsp;·&nbsp; {{ page_size }} per page
+    </span>
+  </div>
+</form>
+
+<!-- Table -->
+<div class="table-wrap">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Timestamp</th>
+        <th>User</th>
+        <th>Action</th>
+        <th>Target</th>
+        <th>IP</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for log in logs %}
+    <tr class="{% if not log.success %}row-danger{% endif %}">
+      <td class="text-muted text-sm" style="white-space:nowrap;">
+        {{ log.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}
+      </td>
+      <td class="fw-600">{{ log.username }}</td>
+      <td><code>{{ log.action }}</code></td>
+      <td class="text-muted text-sm">{{ log.target or '—' }}</td>
+      <td class="text-muted text-sm">{{ log.ip_address or '—' }}</td>
+      <td>
+        {% if log.success %}
+        <span class="badge badge-green"><span class="badge-dot"></span>OK</span>
+        {% else %}
+        <span class="badge badge-red"><span class="badge-dot"></span>FAIL</span>
+        {% endif %}
+      </td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="6">
+        <div class="empty-state" style="padding:40px;">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          <div class="empty-state-title">No audit entries</div>
+          <p class="empty-state-text">
+            {% if action_filter or status_filter %}No entries match the current filters.
+            {% else %}Admin actions will appear here as they occur.{% endif %}
+          </p>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Pagination -->
+{% if total_pages > 1 %}
+<div class="pagination" style="margin-top:12px;">
+  {% set base = '/admin/audit?page=' %}
+  {% set qs = '' %}
+  {% if action_filter %}{% set qs = qs + '&action=' + action_filter %}{% endif %}
+  {% if status_filter %}{% set qs = qs + '&status=' + status_filter %}{% endif %}
+
+  <!-- Prev -->
+  {% if page > 1 %}
+  <a href="{{ base }}{{ page - 1 }}{{ qs }}" class="page-btn" title="Previous">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </a>
+  {% else %}
+  <span class="page-btn" style="opacity:.3;cursor:default;">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </span>
+  {% endif %}
+
+  <!-- Page numbers -->
+  {% for p in range(1, total_pages + 1) %}
+    {% if p == 1 or p == total_pages or (p >= page - 2 and p <= page + 2) %}
+      <a href="{{ base }}{{ p }}{{ qs }}"
+         class="page-btn {% if p == page %}active{% endif %}">{{ p }}</a>
+    {% elif p == 2 or p == total_pages - 1 %}
+      <span class="page-sep">…</span>
+    {% endif %}
+  {% endfor %}
+
+  <!-- Next -->
+  {% if page < total_pages %}
+  <a href="{{ base }}{{ page + 1 }}{{ qs }}" class="page-btn" title="Next">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+  </a>
+  {% else %}
+  <span class="page-btn" style="opacity:.3;cursor:default;">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+  </span>
+  {% endif %}
+</div>
+{% endif %}
+{% endblock %}

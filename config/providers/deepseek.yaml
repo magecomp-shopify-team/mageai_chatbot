@@ -1,0 +1,12 @@
+provider_id: deepseek
+display_name: DeepSeek
+enabled: true
+api_key_env: DEEPSEEK_API_KEY
+base_url: https://api.deepseek.com/v1
+default_model: deepseek-chat
+available_models:
+  - deepseek-chat
+  - deepseek-reasoner
+max_tokens_limit: 8192
+default_temperature: 0.7
+timeout_seconds: 90

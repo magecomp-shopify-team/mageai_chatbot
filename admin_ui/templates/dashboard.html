@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — Chatbot Admin{% endblock %}
+{% block breadcrumb %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="page-header-left">
+    <h1 class="page-title">Dashboard</h1>
+    <p class="page-subtitle">System overview and quick actions</p>
+  </div>
+  <div class="page-header-actions">
+    <a href="/admin/upload" class="btn btn-primary">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      Upload Document
+    </a>
+  </div>
+</div>
+
+<!-- Stats -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-icon indigo">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="6" height="18"/><rect x="9" y="3" width="6" height="18"/><rect x="16" y="3" width="6" height="18"/></svg>
+    </div>
+    <div class="stat-value">{{ app_ids | length }}</div>
+    <div class="stat-label">Active Apps</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon green">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+    </div>
+    <div class="stat-value">{{ doc_counts.values() | sum }}</div>
+    <div class="stat-label">Documents</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon amber">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+    </div>
+    <div class="stat-value">{{ providers_health | length }}</div>
+    <div class="stat-label">Providers</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon green">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    </div>
+    <div class="stat-value">{{ providers_health | selectattr('healthy') | list | length }}</div>
+    <div class="stat-label">Healthy Providers</div>
+  </div>
+</div>
+
+<!-- Provider health -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-title">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Provider Health
+    </div>
+    <a href="/admin/providers" class="btn btn-ghost btn-sm">Manage →</a>
+  </div>
+  <div class="provider-chips">
+    {% for p in providers_health %}
+    <div class="provider-chip {% if p.healthy %}healthy{% else %}unhealthy{% endif %}">
+      <div class="chip-led"></div>
+      {{ p.id }}
+      {% if p.healthy %}● Online{% else %}● Offline{% endif %}
+    </div>
+    {% else %}
+    <p class="text-muted text-sm">No providers configured.</p>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Apps table -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-title">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="6" height="18"/><rect x="9" y="3" width="6" height="18"/><rect x="16" y="3" width="6" height="18"/></svg>
+      Apps
+      <span class="section-count">{{ app_ids | length }} total</span>
+    </div>
+    <a href="/admin/apps" class="btn btn-ghost btn-sm">Manage →</a>
+  </div>
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>App ID</th>
+          <th>Documents</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for app_id in app_ids %}
+      <tr>
+        <td>
+          <div class="flex items-center gap-2">
+            <div style="width:28px;height:28px;border-radius:6px;background:var(--primary-glow);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;">
+              {{ app_id[0].upper() }}
+            </div>
+            <code>{{ app_id }}</code>
+          </div>
+        </td>
+        <td>
+          <span class="badge badge-gray">{{ doc_counts.get(app_id, 0) }} docs</span>
+        </td>
+        <td>
+          <div class="flex gap-2">
+            <a href="/admin/library" class="btn btn-sm btn-ghost">View Library</a>
+            <a href="/admin/upload" class="btn btn-sm btn-primary">Upload</a>
+          </div>
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="3">
+          <div class="empty-state" style="padding:24px;">
+            <p class="text-muted text-sm">No apps configured yet. <a href="/admin/apps" style="color:var(--primary)">Create one →</a></p>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,15 @@
+provider_id: anthropic
+display_name: Anthropic Claude
+enabled: true
+api_key_env: ANTHROPIC_API_KEY
+base_url: null
+default_model: claude-haiku-4-5-20251001
+available_models:
+  - claude-haiku-4-5-20251001
+  - claude-sonnet-4-5
+  - claude-opus-4-5
+  - claude-sonnet-4-6
+  - claude-opus-4-6
+max_tokens_limit: 8192
+default_temperature: 0.7
+timeout_seconds: 60

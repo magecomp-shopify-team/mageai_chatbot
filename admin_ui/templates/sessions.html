@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Sessions — Chatbot Admin{% endblock %}
+{% block breadcrumb %}Sessions{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="page-header-left">
+    <h1 class="page-title">Active Sessions</h1>
+    <p class="page-subtitle">View and manage live user sessions across all apps</p>
+  </div>
+</div>
+
+<div class="table-wrap">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Session ID</th>
+        <th>App</th>
+        <th style="text-align:right;">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for s in sessions %}
+    <tr>
+      <td>
+        <code>{{ s.session_id }}</code>
+      </td>
+      <td>
+        <span class="badge badge-indigo">{{ s.app_id }}</span>
+      </td>
+      <td style="text-align:right;">
+        <button class="btn btn-sm btn-danger"
+          onclick="clearSession('{{ s.session_id }}', '{{ s.app_id }}', this)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+          Clear History
+        </button>
+      </td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="3">
+        <div class="empty-state" style="padding:40px;">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <div class="empty-state-title">No active sessions</div>
+          <p class="empty-state-text">Sessions appear here when users start chatting.</p>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function clearSession(sid, appId, btn) {
+  if (!confirm('Clear history for this session?\n\nThe session will be removed from this list.')) return;
+  btn.disabled = true;
+  btn.textContent = 'Clearing…';
+  const r = await fetch(`/chat/session/${encodeURIComponent(sid)}?app_id=${encodeURIComponent(appId)}`, { method: 'DELETE' });
+  if (r.ok) { toast('Session cleared.', 'success'); setTimeout(() => location.reload(), 700); }
+  else { toast('Failed to clear session.', 'error'); btn.disabled = false; btn.textContent = 'Clear History'; }
+}
+</script>
+{% endblock %}

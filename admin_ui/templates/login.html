@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In — Chatbot Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="/static/admin.css">
+</head>
+<body>
+<div class="login-shell">
+  <div class="login-card">
+
+    <div class="login-header">
+      <div class="login-logo">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+      </div>
+      <h1 class="login-title">Chatbot Admin</h1>
+      <p class="login-sub">Master admin portal — authorised access only</p>
+    </div>
+
+    {% if error %}
+    <div class="alert alert-error" style="margin-bottom:16px;">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      {{ error }}
+    </div>
+    {% endif %}
+
+    <div class="login-box">
+      <form method="post" action="/admin/login">
+        <div class="form-group">
+          <label class="form-label" for="username">
+            Username <span class="required">*</span>
+          </label>
+          <input class="form-control" type="text" id="username" name="username"
+                 placeholder="master_admin" required autofocus>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">
+            Password <span class="required">*</span>
+          </label>
+          <input class="form-control" type="password" id="password" name="password"
+                 placeholder="••••••••••••" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="totp_code">
+            TOTP Code
+            <span style="font-weight:400;color:var(--text-muted);">(optional)</span>
+          </label>
+          <input class="form-control" type="text" id="totp_code" name="totp_code"
+                 placeholder="123456" maxlength="6" autocomplete="one-time-code">
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full btn-lg" style="margin-top:8px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          Sign In
+        </button>
+      </form>
+    </div>
+
+    <p class="text-muted text-sm" style="text-align:center;margin-top:20px;">
+      Powered by RAG · Multi-Provider AI
+    </p>
+  </div>
+</div>
+<script src="/static/admin.js"></script>
+</body>
+</html>
