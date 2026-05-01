@@ -33,6 +33,9 @@ class Settings(BaseSettings):
     META_DB_PATH: Path = Path("./storage/meta.json")
     HISTORY_DB_URL: str = "mysql+aiomysql://user:password@localhost:3306/chatbot"
 
+    # Upload
+    MAX_UPLOAD_SIZE_MB: int = 100       # maximum file size accepted by /docs/upload
+
     # Embedding
     EMBED_MODEL: str = "all-MiniLM-L6-v2"
     EMBED_BATCH_SIZE: int = 64

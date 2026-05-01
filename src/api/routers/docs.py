@@ -5,6 +5,7 @@ from pathlib import Path
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from config.settings import settings
 from src.api.deps import get_current_admin, get_db
 from src.api.schemas.docs import IndexResultSchema
 from src.auth.audit import log_action
@@ -27,7 +28,10 @@ async def upload_document(
     if not file.filename or not file.filename.endswith((".md", ".txt", ".pdf")):
         raise HTTPException(status_code=422, detail="Only .md, .txt, and .pdf files are supported")
 
-    content = await file.read()
+    max_bytes = settings.MAX_UPLOAD_SIZE_MB * 1024 * 1024
+    content = await file.read(max_bytes + 1)
+    if len(content) > max_bytes:
+        raise HTTPException(status_code=413, detail=f"File exceeds maximum allowed size of {settings.MAX_UPLOAD_SIZE_MB} MB")
     with tempfile.NamedTemporaryFile(
         suffix=Path(file.filename).suffix, delete=False
     ) as tmp:
