@@ -20,6 +20,9 @@ dependencies = [
   "groq>=0.9",
   "httpx>=0.27",
 
+  # PDF parsing
+  "pypdf>=4.0",
+
   # Vector DB + Embedding
   "chromadb>=0.5",
   "sentence-transformers>=3.0",
