@@ -262,8 +262,7 @@ ExecStart=/home/chatbot/app/.venv/bin/uvicorn src.api.main:app \
     --port 8000 \
     --workers 2 \
     --log-level info \
-    --access-log \
-    --log-config /home/chatbot/app/src/log_config.json
+    --access-log
 Restart=on-failure
 RestartSec=5
 StandardOutput=append:/home/chatbot/app/logs/app.log

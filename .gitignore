@@ -12,3 +12,4 @@ storage/app.db
 .mypy_cache/
 dist/
 build/
+logs/*
